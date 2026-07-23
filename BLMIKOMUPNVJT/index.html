@@ -1633,16 +1633,21 @@ function submitAspirasi(event) {
         btn.disabled = true;
     }
 
-    var formData = new FormData();
-    formData.append("nama", document.getElementById('nama').value);
-    formData.append("nim", document.getElementById('nim').value);
-    formData.append("prodi", document.getElementById('prodi').value);
-    formData.append("kategori", document.getElementById('kategori').value);
-    formData.append("isi_aspirasi", document.getElementById('isi_aspirasi').value);
+    // Mengemas data ke format URL Encoded (Bypass keamanan CORS)
+    var urlEncodedData = new URLSearchParams();
+    urlEncodedData.append("nama", document.getElementById('nama').value);
+    urlEncodedData.append("nim", document.getElementById('nim').value);
+    urlEncodedData.append("prodi", document.getElementById('prodi').value);
+    urlEncodedData.append("kategori", document.getElementById('kategori').value);
+    urlEncodedData.append("isi_aspirasi", document.getElementById('isi_aspirasi').value);
 
+    // Pastikan SCRIPT_URL_ASPIRASI sudah benar dan berakhiran /exec
     fetch(SCRIPT_URL_ASPIRASI, {
         method: 'POST',
-        body: formData
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: urlEncodedData.toString()
     })
     .then(response => response.text())
     .then(tiket => {
@@ -1652,10 +1657,8 @@ function submitAspirasi(event) {
         }
         document.getElementById('formAspirasi').reset();
         
-        // Memasukkan nomor tiket ke dalam modal
+        // Memasukkan nomor tiket & memunculkan modal
         document.getElementById('teksNomorTiket').innerText = tiket; 
-        
-        // Memunculkan pop-up sukses
         document.getElementById('suksesModal').classList.remove('hidden');
     })
     .catch(error => {
