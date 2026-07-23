@@ -1597,7 +1597,8 @@
 
   // =========================================================
   // Masukkan URL Web App Google Apps Script kamu di sini (pastikan berakhiran /exec)
-const SCRIPT_URL_ASPIRASI = 'ISI_DENGAN_URL_WEB_APP_KAMU';
+
+const SCRIPT_URL_ASPIRASI = 'https://script.google.com/macros/s/AKfycbxIlhP4oSRfapM800BQE49jiNX46ESsEMyVcgSlyCh2CBnHZDK3PMR0IjKcRs4cDRaB/exec';
 
 function submitAspirasi(event) {
     event.preventDefault();
@@ -1607,7 +1608,6 @@ function submitAspirasi(event) {
         btn.disabled = true;
     }
 
-    // Mengumpulkan data dari form
     var formData = new FormData();
     formData.append("nama", document.getElementById('nama').value);
     formData.append("nim", document.getElementById('nim').value);
@@ -1615,19 +1615,22 @@ function submitAspirasi(event) {
     formData.append("kategori", document.getElementById('kategori').value);
     formData.append("isi_aspirasi", document.getElementById('isi_aspirasi').value);
 
-    // Mengirim data ke Google Sheets menggunakan fetch
     fetch(SCRIPT_URL_ASPIRASI, {
         method: 'POST',
         body: formData
     })
     .then(response => response.text())
-    .then(data => {
+    .then(tiket => {
         if(btn) {
           btn.innerText = "Kirim Aspirasi Sekarang"; 
           btn.disabled = false;
         }
         document.getElementById('formAspirasi').reset();
-        document.getElementById('suksesModal').classList.remove('hidden'); // Munculkan pop-up sukses
+        
+        // Jika ingin menampilkan nomor tiket di modal sukses (opsional)
+        console.log("Tiket berhasil dibuat: ", tiket);
+        
+        document.getElementById('suksesModal').classList.remove('hidden');
     })
     .catch(error => {
         console.error('Error:', error);
