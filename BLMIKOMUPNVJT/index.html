@@ -1596,35 +1596,48 @@
   }
 
   // =========================================================
-  // 3. FUNGSI KIRIM ASPIRASI & MODAL
-  // =========================================================
-  function submitAspirasi(event) {
-     event.preventDefault();
-     var btn = document.getElementById('btnSubmit');
-     if(btn) {
-         btn.innerText = "Mengirim..."; 
-         btn.disabled = true;
-     }
+  // Masukkan URL Web App Google Apps Script kamu di sini (pastikan berakhiran /exec)
+const SCRIPT_URL_ASPIRASI = 'ISI_DENGAN_URL_WEB_APP_KAMU';
 
-     var data = {
-        nama: document.getElementById('nama').value,
-        nim: document.getElementById('nim').value,
-        prodi: document.getElementById('prodi').value,
-        kategori: document.getElementById('kategori').value,
-        isi_aspirasi: document.getElementById('isi_aspirasi').value
-     };
+function submitAspirasi(event) {
+    event.preventDefault();
+    var btn = document.getElementById('btnSubmit');
+    if(btn) {
+        btn.innerText = "Mengirim..."; 
+        btn.disabled = true;
+    }
 
-     google.script.run
-        .withSuccessHandler(function() {
-           if(btn) {
-             btn.innerText = "Kirim Aspirasi Sekarang"; 
-             btn.disabled = false;
-           }
-           document.getElementById('formAspirasi').reset();
-           document.getElementById('suksesModal').classList.remove('hidden');
-        })
-        .simpanAspirasi(data);
-  }
+    // Mengumpulkan data dari form
+    var formData = new FormData();
+    formData.append("nama", document.getElementById('nama').value);
+    formData.append("nim", document.getElementById('nim').value);
+    formData.append("prodi", document.getElementById('prodi').value);
+    formData.append("kategori", document.getElementById('kategori').value);
+    formData.append("isi_aspirasi", document.getElementById('isi_aspirasi').value);
+
+    // Mengirim data ke Google Sheets menggunakan fetch
+    fetch(SCRIPT_URL_ASPIRASI, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        if(btn) {
+          btn.innerText = "Kirim Aspirasi Sekarang"; 
+          btn.disabled = false;
+        }
+        document.getElementById('formAspirasi').reset();
+        document.getElementById('suksesModal').classList.remove('hidden'); // Munculkan pop-up sukses
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        if(btn) {
+          btn.innerText = "Kirim Aspirasi Sekarang"; 
+          btn.disabled = false;
+        }
+        alert("Gagal mengirim aspirasi. Silakan periksa koneksi internetmu.");
+    });
+}
 
   function tutupModal() {
      document.getElementById('suksesModal').classList.add('hidden');
