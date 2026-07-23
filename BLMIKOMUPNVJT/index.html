@@ -1414,9 +1414,8 @@
       
       <div class="p-8 md:p-10">
         
-        <!-- Form milikmu dengan URL Apps Script yang sudah benar -->
-        <form id="formAspirasi" action="https://script.google.com/macros/s/AKfycbxIlhP4oSRfapM800BQE49jiNX46ESsEMyVcgSlyCh2CBnHZDK3PMR0IjKcRs4cDRaB/exec" method="POST" target="hidden_iframe" class="space-y-6" onsubmit="alert('Aspirasi berhasil dikirim!'); document.getElementById('formAspirasi').reset();">
-            
+        <!-- Ubah HANYA baris tag form pembukanya menjadi seperti ini -->
+        <form id="formAspirasi" onsubmit="submitAspirasi(event)" class="space-y-6">  
           <div class="grid md:grid-cols-2 gap-6">
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap</label>
@@ -1608,8 +1607,24 @@
   // =========================================================
   // Masukkan URL Web App Google Apps Script kamu di sini (pastikan berakhiran /exec)
 
+// ==========================================
+// 1. PENGATURAN & INISIALISASI AWAL
+// ==========================================
 const SCRIPT_URL_ASPIRASI = 'https://script.google.com/macros/s/AKfycbxIlhP4oSRfapM800BQE49jiNX46ESsEMyVcgSlyCh2CBnHZDK3PMR0IjKcRs4cDRaB/exec';
 
+// Jalankan otomatis saat website dibuka
+window.addEventListener("DOMContentLoaded", function() {
+    if(typeof bukaHalaman === 'function') {
+        bukaHalaman('beranda'); 
+    }
+    // Catatan: muatDokumen() sementara dimatikan otomatisnya agar tidak error di Vercel
+    // muatDokumen(); 
+});
+
+
+// ==========================================
+// 2. FUNGSI ASPIRASI & KONTROL MODAL (VERSI FETCH VERCEL)
+// ==========================================
 function submitAspirasi(event) {
     event.preventDefault();
     var btn = document.getElementById('btnSubmit');
@@ -1637,9 +1652,10 @@ function submitAspirasi(event) {
         }
         document.getElementById('formAspirasi').reset();
         
-        // Jika ingin menampilkan nomor tiket di modal sukses (opsional)
-        console.log("Tiket berhasil dibuat: ", tiket);
+        // Memasukkan nomor tiket ke dalam modal
+        document.getElementById('teksNomorTiket').innerText = tiket; 
         
+        // Memunculkan pop-up sukses
         document.getElementById('suksesModal').classList.remove('hidden');
     })
     .catch(error => {
@@ -1652,257 +1668,111 @@ function submitAspirasi(event) {
     });
 }
 
-  function tutupModal() {
-     document.getElementById('suksesModal').classList.add('hidden');
-     bukaHalaman('beranda'); 
-  }
-  // 1. FUNGSI PEMICU (Mengambil Data)
-  function muatDokumen() {
-    google.script.run
-      .withSuccessHandler(function(data) {
-          // Sistem Anti-Macet: Pisahkan proses agar tidak saling ganggu
-          try { tampilkanDokumen(data); } catch(e) { console.log("Wadah dokumen tidak di halaman ini."); }
-          try { tampilkanBerita(data); } catch(e) { console.log("Wadah berita tidak di halaman ini."); }
-      })
-      .getDataDokumen();
-  }
-
-  // FUNGSI MENAMPILKAN SEMUA DOKUMEN & PRESS RELEASE (DENGAN POSTER DI KIRI)
-  function tampilkanDokumen(data) {
-    const wadahDokumen = document.getElementById("wadah-dokumen"); // Ganti ID sesuai wadah di halaman dokumenmu
-    
-    if (!wadahDokumen) return;
-
-    if (!data || data.length === 0 || typeof data === 'string') {
-        wadahDokumen.innerHTML = `<div class="text-center text-gray-500 py-8">Belum ada dokumen atau press release.</div>`;
-        return;
-    }
-
-    // --- 1. BERSIHKAN DATA (Hapus Baris Kosong & Header) ---
-    let dataBersih = data.filter(function(baris) {
-        return baris[1] && baris[1] !== "" && baris[1].toString().toLowerCase() !== "judul";
-    });
-
-    // --- 2. PROSES MENGURUTKAN TANGGAL (Terbaru di atas) ---
-    dataBersih.sort(function(a, b) {
-        function konversiTanggal(tglStr) {
-            if (!tglStr) return 0;
-            const bulanIndo = {
-                'januari': 0, 'jan': 0, 'februari': 1, 'feb': 1,
-                'maret': 2, 'mar': 2, 'april': 3, 'apr': 3,
-                'mei': 4, 'juni': 5, 'jun': 5, 'juli': 6, 'jul': 6,
-                'agustus': 7, 'agu': 7, 'ags': 7, 'september': 8, 'sep': 8,
-                'oktober': 9, 'okt': 9, 'november': 10, 'nov': 10,
-                'desember': 11, 'des': 11
-            };
-            let str = tglStr.toString().toLowerCase().trim();
-            let bagian = str.split(" ");
-            if (bagian.length >= 3) {
-                let hari = parseInt(bagian[0]);
-                let bulan = bulanIndo[bagian[1]];
-                let tahun = parseInt(bagian[2]);
-                if (bulan !== undefined && !isNaN(hari) && !isNaN(tahun)) {
-                    return new Date(tahun, bulan, hari).getTime();
-                }
-            }
-            let hasil = new Date(tglStr).getTime();
-            return isNaN(hasil) ? 0 : hasil;
-        }
-        return konversiTanggal(b[2]) - konversiTanggal(a[2]); 
-    });
-
-    // --- 3. PROSES MERAKIT HTML (Format List: Poster di Kiri, Teks & Tombol di Kanan) ---
-    let htmlContent = "";
-
-    for (let i = 0; i < dataBersih.length; i++) {
-        let baris = dataBersih[i];
-        let kategori = baris[0] || "Dokumen";
-        let judul = baris[1] || "Tanpa Judul";
-        let tanggal = baris[2] || "-";
-        let linkDoc = baris[3] || "#";
-        let linkMentahGambar = baris[4] || ""; 
-        
-        let urlGambarFinal = "";
-        
-        // Konversi Link Google Drive agar langsung jadi gambar
-        if (linkMentahGambar.includes("drive.google.com")) {
-            let match = linkMentahGambar.match(/\/d\/([a-zA-Z0-9_-]+)/);
-            if (match && match[1]) {
-                urlGambarFinal = "https://drive.google.com/thumbnail?id=" + match[1] + "&sz=w1000";
-            }
-        } else if (linkMentahGambar.startsWith("http")) {
-            urlGambarFinal = linkMentahGambar;
-        }
-
-        // Elemen Gambar Poster di Kiri (Responsif: berbentuk kotak berdiri/menyesuaikan)
-        let elemenGambar = urlGambarFinal 
-            ? `<div class="w-full md:w-36 h-48 md:h-32 shrink-0 rounded-2xl overflow-hidden bg-gray-100 shadow-sm"><img src="${urlGambarFinal}" alt="${judul}" class="w-full h-full object-cover"></div>` 
-            : `<div class="w-full md:w-36 h-48 md:h-32 shrink-0 rounded-2xl bg-gradient-to-br from-red-900 to-maroon flex items-center justify-center text-white font-bold p-2 text-center text-xs">Vaktavya</div>`;
-
-        htmlContent += `
-          <div class="bg-white rounded-[24px] p-6 shadow-sm border border-gray-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:shadow-md transition-all">
-            
-            <!-- Bagian Kiri: Poster & Keterangan -->
-            <div class="flex flex-col md:flex-row items-start md:items-center gap-6 w-full">
-              ${elemenGambar}
-              <div>
-                <span class="text-xs font-bold text-maroon bg-red-50 px-3 py-1 rounded-full inline-block mb-2">${kategori}</span>
-                <h3 class="font-extrabold text-gray-900 text-lg md:text-xl mb-1">${judul}</h3>
-                <p class="text-xs text-gray-500">Diperbarui : ${tanggal}</p>
-              </div>
-            </div>
-
-            <!-- Bagian Kanan: Tombol Aksi -->
-            <div class="w-full md:w-auto flex justify-end shrink-0">
-              <a href="${linkDoc}" target="_blank" class="w-full md:w-auto text-center border border-maroon text-maroon hover:bg-maroon hover:text-white px-6 py-2.5 rounded-full font-semibold text-sm transition-all shadow-sm">
-                Baca Dokumen
-              </a>
-            </div>
-
-          </div>
-        `;
-    }
-    
-    wadahDokumen.innerHTML = htmlContent;
-  }
-
-// FUNGSI MENAMPILKAN BERITA DI HOMEPAGE (DITARUH DI INDEX.HTML)
-  function tampilkanBerita(data) {
-    const wadahBerita = document.getElementById("wadah-berita");
-    
-    if (!wadahBerita) return;
-
-    if (!data || data.length === 0 || typeof data === 'string') {
-        wadahBerita.innerHTML = `<div class="col-span-3 text-center text-gray-500 py-8">Belum ada berita terbaru.</div>`;
-        return;
-    }
-
-    // --- 1. BERSIHKAN DATA (Hapus Baris Kosong & Header) ---
-    let dataBersih = data.filter(function(baris) {
-        return baris[1] && baris[1] !== "" && baris[1].toString().toLowerCase() !== "judul";
-    });
-
-    // --- 2. PROSES MENGURUTKAN TANGGAL (Support Bahasa Indonesia) ---
-    dataBersih.sort(function(a, b) {
-        function konversiTanggal(tglStr) {
-            if (!tglStr) return 0;
-            
-            const bulanIndo = {
-                'januari': 0, 'jan': 0, 'februari': 1, 'feb': 1,
-                'maret': 2, 'mar': 2, 'april': 3, 'apr': 3,
-                'mei': 4, 'juni': 5, 'jun': 5, 'juli': 6, 'jul': 6,
-                'agustus': 7, 'agu': 7, 'ags': 7, 'september': 8, 'sep': 8,
-                'oktober': 9, 'okt': 9, 'november': 10, 'nov': 10,
-                'desember': 11, 'des': 11
-            };
-            
-            let str = tglStr.toString().toLowerCase().trim();
-            let bagian = str.split(" ");
-            
-            if (bagian.length >= 3) {
-                let hari = parseInt(bagian[0]);
-                let bulan = bulanIndo[bagian[1]];
-                let tahun = parseInt(bagian[2]);
-                
-                if (bulan !== undefined && !isNaN(hari) && !isNaN(tahun)) {
-                    return new Date(tahun, bulan, hari).getTime();
-                }
-            }
-            
-            let hasil = new Date(tglStr).getTime();
-            return isNaN(hasil) ? 0 : hasil;
-        }
-
-        return konversiTanggal(b[2]) - konversiTanggal(a[2]); 
-    });
-
-    // --- 3. PROSES MERAKIT HTML ---
-    let htmlContent = "";
-    let batasBerita = Math.min(dataBersih.length, 3); 
-
-    for (let i = 0; i < batasBerita; i++) {
-        let baris = dataBersih[i];
-        let kategori = baris[0] || "Berita";
-        let judul = baris[1] || "Tanpa Judul";
-        let tanggal = baris[2] || "-";
-        let linkDoc = baris[3] || "#";
-        let linkMentahGambar = baris[4] || ""; 
-        
-        let urlGambarFinal = "";
-        
-        // PENGUBAH OTOMATIS LINK DRIVE MENJADI DIRECT IMAGE THUMBNAIL
-        if (linkMentahGambar.includes("drive.google.com")) {
-            let match = linkMentahGambar.match(/\/d\/([a-zA-Z0-9_-]+)/);
-            if (match && match[1]) {
-                urlGambarFinal = "https://drive.google.com/thumbnail?id=" + match[1] + "&sz=w1000";
-            }
-        } else if (linkMentahGambar.startsWith("http")) {
-            urlGambarFinal = linkMentahGambar;
-        }
-
-        // Tampilkan gambar jika link valid, jika tidak tampilkan kotak judul bernuansa maroon
-        let elemenGambar = urlGambarFinal 
-            ? `<img src="${urlGambarFinal}" alt="${judul}" class="w-full h-48 object-cover">` 
-            : `<div class="w-full h-48 bg-gradient-to-br from-red-900 to-maroon flex items-center justify-center text-white font-bold p-4 text-center text-sm">${judul}</div>`;
-
-        htmlContent += `
-          <a href="${linkDoc}" target="_blank" class="block bg-white rounded-[24px] overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all cursor-pointer">
-            ${elemenGambar}
-            <div class="p-6">
-              <span class="text-xs font-bold text-maroon bg-red-50 px-2 py-1 rounded">${kategori}</span>
-              <h3 class="font-bold text-gray-900 mt-3 mb-2">${judul}</h3>
-              <p class="text-xs text-gray-500">${tanggal}</p>
-            </div>
-          </a>
-        `;
-    }
-    
-    wadahBerita.innerHTML = htmlContent;
-  }
-  // JALANKAN SAAT WEBSITE DIBUKA
-  window.addEventListener("DOMContentLoaded", muatDokumen);
-  function submitAspirasi(event) {
-    event.preventDefault(); // Mencegah halaman me-refresh
-    
-    const btn = document.getElementById("btnSubmit");
-    btn.innerHTML = "Mengirim..."; // Ubah teks tombol jadi loading
-    btn.disabled = true;
-
-    // Kumpulkan data dari form
-    const dataAspirasi = {
-      nama: document.getElementById("nama").value,
-      nim: document.getElementById("nim").value,
-      prodi: document.getElementById("prodi").value,
-      kategori: document.getElementById("kategori").value,
-      isi: document.getElementById("isi_aspirasi").value
-    };
-
-    // Kirim ke Google Script
-    google.script.run
-      .withSuccessHandler(function(nomorTiket) {
-         // Jika sukses, tampilkan nomor tiket di modal
-         document.getElementById("teksNomorTiket").innerText = nomorTiket;
-         document.getElementById("suksesModal").classList.remove("hidden");
-         
-         // Bersihkan form dan kembalikan tombol
-         document.getElementById("formAspirasi").reset();
-         btn.innerHTML = "Kirim Aspirasi Sekarang";
-         btn.disabled = false;
-      })
-      .withFailureHandler(function(err) {
-         alert("Terjadi kesalahan: " + err);
-         btn.innerHTML = "Kirim Aspirasi Sekarang";
-         btn.disabled = false;
-      })
-      .simpanAspirasi(dataAspirasi); // Memanggil fungsi di Code.gs
-  }
-
-  function tutupModal() {
+function tutupModal() {
     document.getElementById("suksesModal").classList.add("hidden");
-  }
+}
 
-  // --- FUNGSI LACAK LAPORAN ---
-  function cariLaporan() {
+function salinResiModal() {
+    const teksResi = document.getElementById('teksNomorTiket').innerText;
+    const btnSalin = document.getElementById('btnSalin');
+
+    const inputDummy = document.createElement("textarea");
+    inputDummy.value = teksResi;
+    document.body.appendChild(inputDummy);
+    inputDummy.select();
+    
+    try {
+      var berhasil = document.execCommand('copy');
+      if (berhasil) {
+        btnSalin.classList.remove('bg-red-50', 'text-maroon', 'hover:bg-maroon', 'hover:text-white');
+        btnSalin.classList.add('bg-green-600', 'text-white');
+        
+        setTimeout(function() {
+          btnSalin.classList.remove('bg-green-600', 'text-white');
+          btnSalin.classList.add('bg-red-50', 'text-maroon', 'hover:bg-maroon', 'hover:text-white');
+        }, 2000);
+      } else {
+        alert("Gagal menyalin otomatis.");
+      }
+    } catch (err) {
+      alert("Browser Anda tidak mendepung salin otomatis.");
+    }
+    
+    document.body.removeChild(inputDummy);
+}
+
+function lacakLangsungModal() {
+    const resiBaru = document.getElementById('teksNomorTiket').innerText;
+    document.getElementById('suksesModal').classList.add('hidden');
+    bukaHalaman('lacak-laporan'); 
+    
+    setTimeout(() => {
+      const inputLacak = document.getElementById('inputTiket');
+      if (inputLacak) {
+        inputLacak.value = resiBaru; 
+        inputLacak.focus(); 
+      }
+    }, 150); 
+}
+
+
+// ==========================================
+// 3. FUNGSI UI & INTERAKSI HALAMAN
+// ==========================================
+function toggleMenuHP() {
+    const menu = document.getElementById('menuHP');
+    if (menu.classList.contains('hidden')) {
+      menu.classList.remove('hidden');
+      menu.classList.add('flex');
+    } else {
+      menu.classList.add('hidden');
+      menu.classList.remove('flex');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const slider = document.getElementById('slider-profil');
+    if (!slider) return; 
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener('mousedown', (e) => {
+      isDown = true;
+      slider.style.cursor = 'grabbing'; 
+      slider.style.scrollSnapType = 'none'; 
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+
+    slider.addEventListener('mouseleave', () => {
+      isDown = false;
+      slider.style.cursor = 'grab';
+      slider.style.scrollSnapType = 'x mandatory'; 
+    });
+
+    slider.addEventListener('mouseup', () => {
+      isDown = false;
+      slider.style.cursor = 'grab';
+      slider.style.scrollSnapType = 'x mandatory'; 
+    });
+
+    slider.addEventListener('mousemove', (e) => {
+      if (!isDown) return; 
+      e.preventDefault(); 
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 1.5; 
+      slider.scrollLeft = scrollLeft - walk;
+    });
+});
+
+
+// ==========================================
+// 4. FUNGSI DATABASE (YANG MASIH MENGGUNAKAN GOOGLE SCRIPT RUN)
+// ==========================================
+
+function cariLaporan() {
     const nomorTiket = document.getElementById("inputTiket").value.trim().toUpperCase();
     const btn = document.getElementById("btnLacak");
     const wadahHasil = document.getElementById("hasilLacak");
@@ -1912,10 +1782,9 @@ function submitAspirasi(event) {
       return;
     }
 
-    // Efek Loading
     btn.innerHTML = "Mencari...";
     btn.disabled = true;
-    wadahHasil.classList.add("hidden"); // Sembunyikan hasil lama
+    wadahHasil.classList.add("hidden"); 
 
     google.script.run
       .withSuccessHandler(function(hasil) {
@@ -1930,8 +1799,7 @@ function submitAspirasi(event) {
                <p class="text-gray-500 mt-2">Pastikan nomor resi yang Anda masukkan benar (contoh: VK-1234).</p>
              </div>`;
         } else {
-           // Mengatur warna badge otomatis berdasarkan status
-           let statusWarna = "bg-gray-100 text-gray-700"; // Default (Diterima)
+           let statusWarna = "bg-gray-100 text-gray-700"; 
            let statusText = hasil.status.toLowerCase();
            
            if (statusText.includes("proses") || statusText.includes("kaji")) {
@@ -1970,116 +1838,173 @@ function submitAspirasi(event) {
         btn.disabled = false;
       })
       .cariTiketDiServer(nomorTiket);
-  }
-  // JALANKAN OTOMATIS SAAT WEB DIBUKA
-  window.addEventListener("DOMContentLoaded", function() {
-      bukaHalaman('beranda'); // Ganti 'beranda' jika ingin halaman lain yang muncul pertama
-  });
-  // Fungsi untuk buka-tutup Menu HP
-  function toggleMenuHP() {
-    const menu = document.getElementById('menuHP');
-    if (menu.classList.contains('hidden')) {
-      menu.classList.remove('hidden');
-      menu.classList.add('flex');
-    } else {
-      menu.classList.add('hidden');
-      menu.classList.remove('flex');
-    }
-  }
-// --- FUNGSI SALIN RESI ANTI-GAGAL (COMPATIBLE DI SEMUA HP) ---
-  function salinResiModal() {
-    const teksResi = document.getElementById('teksNomorTiket').innerText;
-    const btnSalin = document.getElementById('btnSalin');
+}
 
-    // Metode Cadangan (Fallback) menggunakan textarea tersembunyi
-    const inputDummy = document.createElement("textarea");
-    inputDummy.value = teksResi;
-    document.body.appendChild(inputDummy);
-    inputDummy.select();
-    
-    try {
-      var berhasil = document.execCommand('copy');
-      if (berhasil) {
-        // Efek Visual Berhasil (Tombol berubah jadi hijau sebentar)
-        btnSalin.classList.remove('bg-red-50', 'text-maroon', 'hover:bg-maroon', 'hover:text-white');
-        btnSalin.classList.add('bg-green-600', 'text-white');
+function muatDokumen() {
+    google.script.run
+      .withSuccessHandler(function(data) {
+          try { tampilkanDokumen(data); } catch(e) { console.log("Wadah dokumen tidak ada."); }
+          try { tampilkanBerita(data); } catch(e) { console.log("Wadah berita tidak ada."); }
+      })
+      .getDataDokumen();
+}
+
+function tampilkanDokumen(data) {
+    const wadahDokumen = document.getElementById("wadah-dokumen"); 
+    if (!wadahDokumen) return;
+
+    if (!data || data.length === 0 || typeof data === 'string') {
+        wadahDokumen.innerHTML = `<div class="text-center text-gray-500 py-8">Belum ada dokumen atau press release.</div>`;
+        return;
+    }
+
+    let dataBersih = data.filter(function(baris) {
+        return baris[1] && baris[1] !== "" && baris[1].toString().toLowerCase() !== "judul";
+    });
+
+    dataBersih.sort(function(a, b) {
+        function konversiTanggal(tglStr) {
+            if (!tglStr) return 0;
+            const bulanIndo = {
+                'januari': 0, 'jan': 0, 'februari': 1, 'feb': 1, 'maret': 2, 'mar': 2, 'april': 3, 'apr': 3,
+                'mei': 4, 'juni': 5, 'jun': 5, 'juli': 6, 'jul': 6, 'agustus': 7, 'agu': 7, 'ags': 7, 
+                'september': 8, 'sep': 8, 'oktober': 9, 'okt': 9, 'november': 10, 'nov': 10, 'desember': 11, 'des': 11
+            };
+            let str = tglStr.toString().toLowerCase().trim();
+            let bagian = str.split(" ");
+            if (bagian.length >= 3) {
+                let hari = parseInt(bagian[0]);
+                let bulan = bulanIndo[bagian[1]];
+                let tahun = parseInt(bagian[2]);
+                if (bulan !== undefined && !isNaN(hari) && !isNaN(tahun)) {
+                    return new Date(tahun, bulan, hari).getTime();
+                }
+            }
+            let hasil = new Date(tglStr).getTime();
+            return isNaN(hasil) ? 0 : hasil;
+        }
+        return konversiTanggal(b[2]) - konversiTanggal(a[2]); 
+    });
+
+    let htmlContent = "";
+    for (let i = 0; i < dataBersih.length; i++) {
+        let baris = dataBersih[i];
+        let kategori = baris[0] || "Dokumen";
+        let judul = baris[1] || "Tanpa Judul";
+        let tanggal = baris[2] || "-";
+        let linkDoc = baris[3] || "#";
+        let linkMentahGambar = baris[4] || ""; 
+        let urlGambarFinal = "";
         
-        // Kembalikan seperti semula setelah 2 detik
-        setTimeout(function() {
-          btnSalin.classList.remove('bg-green-600', 'text-white');
-          btnSalin.classList.add('bg-red-50', 'text-maroon', 'hover:bg-maroon', 'hover:text-white');
-        }, 2000);
-      } else {
-        alert("Gagal menyalin otomatis.");
-      }
-    } catch (err) {
-      alert("Browser Anda tidak mendepung salin otomatis.");
+        if (linkMentahGambar.includes("drive.google.com")) {
+            let match = linkMentahGambar.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                urlGambarFinal = "https://drive.google.com/thumbnail?id=" + match[1] + "&sz=w1000";
+            }
+        } else if (linkMentahGambar.startsWith("http")) {
+            urlGambarFinal = linkMentahGambar;
+        }
+
+        let elemenGambar = urlGambarFinal 
+            ? `<div class="w-full md:w-36 h-48 md:h-32 shrink-0 rounded-2xl overflow-hidden bg-gray-100 shadow-sm"><img src="${urlGambarFinal}" alt="${judul}" class="w-full h-full object-cover"></div>` 
+            : `<div class="w-full md:w-36 h-48 md:h-32 shrink-0 rounded-2xl bg-gradient-to-br from-red-900 to-maroon flex items-center justify-center text-white font-bold p-2 text-center text-xs">Vaktavya</div>`;
+
+        htmlContent += `
+          <div class="bg-white rounded-[24px] p-6 shadow-sm border border-gray-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:shadow-md transition-all">
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-6 w-full">
+              ${elemenGambar}
+              <div>
+                <span class="text-xs font-bold text-maroon bg-red-50 px-3 py-1 rounded-full inline-block mb-2">${kategori}</span>
+                <h3 class="font-extrabold text-gray-900 text-lg md:text-xl mb-1">${judul}</h3>
+                <p class="text-xs text-gray-500">Diperbarui : ${tanggal}</p>
+              </div>
+            </div>
+            <div class="w-full md:w-auto flex justify-end shrink-0">
+              <a href="${linkDoc}" target="_blank" class="w-full md:w-auto text-center border border-maroon text-maroon hover:bg-maroon hover:text-white px-6 py-2.5 rounded-full font-semibold text-sm transition-all shadow-sm">
+                Baca Dokumen
+              </a>
+            </div>
+          </div>
+        `;
     }
-    
-    document.body.removeChild(inputDummy);
-  }
-// Script untuk fitur Drag-to-Scroll pada Slider Profil
-  document.addEventListener('DOMContentLoaded', () => {
-    const slider = document.getElementById('slider-profil');
-    
-    // KODE PENGAMAN: Cek apakah slider ada di halaman ini
-    if (!slider) return; 
+    wadahDokumen.innerHTML = htmlContent;
+}
 
-    let isDown = false;
-    let startX;
-    let scrollLeft;
+function tampilkanBerita(data) {
+    const wadahBerita = document.getElementById("wadah-berita");
+    if (!wadahBerita) return;
 
-    // Saat mouse ditekan (klik)
-    slider.addEventListener('mousedown', (e) => {
-      isDown = true;
-      slider.style.cursor = 'grabbing'; // Ubah kursor jadi tangan menggenggam
-      slider.style.scrollSnapType = 'none'; // Matikan snap sementara
-      startX = e.pageX - slider.offsetLeft;
-      scrollLeft = slider.scrollLeft;
+    if (!data || data.length === 0 || typeof data === 'string') {
+        wadahBerita.innerHTML = `<div class="col-span-3 text-center text-gray-500 py-8">Belum ada berita terbaru.</div>`;
+        return;
+    }
+
+    let dataBersih = data.filter(function(baris) {
+        return baris[1] && baris[1] !== "" && baris[1].toString().toLowerCase() !== "judul";
     });
 
-    // Saat mouse keluar dari area slider
-    slider.addEventListener('mouseleave', () => {
-      isDown = false;
-      slider.style.cursor = 'grab';
-      slider.style.scrollSnapType = 'x mandatory'; // Nyalakan snap
+    dataBersih.sort(function(a, b) {
+        function konversiTanggal(tglStr) {
+            if (!tglStr) return 0;
+            const bulanIndo = {
+                'januari': 0, 'jan': 0, 'februari': 1, 'feb': 1, 'maret': 2, 'mar': 2, 'april': 3, 'apr': 3,
+                'mei': 4, 'juni': 5, 'jun': 5, 'juli': 6, 'jul': 6, 'agustus': 7, 'agu': 7, 'ags': 7, 
+                'september': 8, 'sep': 8, 'oktober': 9, 'okt': 9, 'november': 10, 'nov': 10, 'desember': 11, 'des': 11
+            };
+            let str = tglStr.toString().toLowerCase().trim();
+            let bagian = str.split(" ");
+            if (bagian.length >= 3) {
+                let hari = parseInt(bagian[0]);
+                let bulan = bulanIndo[bagian[1]];
+                let tahun = parseInt(bagian[2]);
+                if (bulan !== undefined && !isNaN(hari) && !isNaN(tahun)) {
+                    return new Date(tahun, bulan, hari).getTime();
+                }
+            }
+            let hasil = new Date(tglStr).getTime();
+            return isNaN(hasil) ? 0 : hasil;
+        }
+        return konversiTanggal(b[2]) - konversiTanggal(a[2]); 
     });
 
-    // Saat tombol mouse dilepas
-    slider.addEventListener('mouseup', () => {
-      isDown = false;
-      slider.style.cursor = 'grab';
-      slider.style.scrollSnapType = 'x mandatory'; // Nyalakan snap
-    });
+    let htmlContent = "";
+    let batasBerita = Math.min(dataBersih.length, 3); 
 
-    // Saat mouse digeser
-    slider.addEventListener('mousemove', (e) => {
-      if (!isDown) return; 
-      e.preventDefault(); 
-      const x = e.pageX - slider.offsetLeft;
-      const walk = (x - startX) * 1.5; // Kecepatan geser
-      slider.scrollLeft = scrollLeft - walk;
-    });
-  });
-  function lacakLangsungModal() {
-    // 1. Ambil nomor resi dari pop-up
-    const resiBaru = document.getElementById('teksNomorTiket').innerText;
-    
-    // 2. Tutup Pop-up
-    document.getElementById('suksesModal').classList.add('hidden');
-    
-    // 3. Pindah ke halaman "lacak-laporan"
-    bukaHalaman('lacak-laporan'); 
-    
-    // 4. Masukkan resi otomatis dengan sedikit jeda agar halaman termuat utuh
-    setTimeout(() => {
-      const inputLacak = document.getElementById('inputTiket');
-      if (inputLacak) {
-        inputLacak.value = resiBaru; // Memasukkan kode
-        inputLacak.focus(); // Fokus kursor ke dalam kolom
-      }
-    }, 150); // Jeda 150 milidetik
-  }
+    for (let i = 0; i < batasBerita; i++) {
+        let baris = dataBersih[i];
+        let kategori = baris[0] || "Berita";
+        let judul = baris[1] || "Tanpa Judul";
+        let tanggal = baris[2] || "-";
+        let linkDoc = baris[3] || "#";
+        let linkMentahGambar = baris[4] || ""; 
+        let urlGambarFinal = "";
+        
+        if (linkMentahGambar.includes("drive.google.com")) {
+            let match = linkMentahGambar.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                urlGambarFinal = "https://drive.google.com/thumbnail?id=" + match[1] + "&sz=w1000";
+            }
+        } else if (linkMentahGambar.startsWith("http")) {
+            urlGambarFinal = linkMentahGambar;
+        }
+
+        let elemenGambar = urlGambarFinal 
+            ? `<img src="${urlGambarFinal}" alt="${judul}" class="w-full h-48 object-cover">` 
+            : `<div class="w-full h-48 bg-gradient-to-br from-red-900 to-maroon flex items-center justify-center text-white font-bold p-4 text-center text-sm">${judul}</div>`;
+
+        htmlContent += `
+          <a href="${linkDoc}" target="_blank" class="block bg-white rounded-[24px] overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all cursor-pointer">
+            ${elemenGambar}
+            <div class="p-6">
+              <span class="text-xs font-bold text-maroon bg-red-50 px-2 py-1 rounded">${kategori}</span>
+              <h3 class="font-bold text-gray-900 mt-3 mb-2">${judul}</h3>
+              <p class="text-xs text-gray-500">${tanggal}</p>
+            </div>
+          </a>
+        `;
+    }
+    wadahBerita.innerHTML = htmlContent;
+}
 </script>
 </body>
 </html>
