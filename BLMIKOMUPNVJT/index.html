@@ -1715,22 +1715,31 @@ const SCRIPT_URL_API = 'https://script.google.com/macros/s/AKfycbzEWvh2HM0V-F9g_
 function submitAspirasi(event) {
     event.preventDefault();
 
-    const formElement = event.target;
-    const formData = new FormData(formElement);
+    const btn = document.getElementById('btnSubmit');
+    if (btn) {
+        btn.innerText = "Mengirim...";
+        btn.disabled = true;
+    }
 
-    const formElement = document.getElementById('formInputAspirasi');
+    const formElement = event.target;
     const formData = new FormData(formElement);
     const urlEncoded = new URLSearchParams(formData);
 
     fetch(SCRIPT_URL_API, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
         body: urlEncoded.toString()
     })
     .then(res => res.json())
     .then(hasil => {
-        if(btn) { btn.innerText = "Kirim Aspirasi Sekarang"; btn.disabled = false; }
-        if(hasil.status === "sukses") {
+        if (btn) {
+            btn.innerText = "Kirim Aspirasi Sekarang";
+            btn.disabled = false;
+        }
+
+        if (hasil.status === "sukses") {
             formElement.reset();
             document.getElementById('teksNomorTiket').innerText = hasil.tiket;
             document.getElementById('suksesModal').classList.remove('hidden');
@@ -1739,8 +1748,14 @@ function submitAspirasi(event) {
         }
     })
     .catch(err => {
-        if(btn) { btn.innerText = "Kirim Aspirasi Sekarang"; btn.disabled = false; }
-        alert("Gagal mengirim aspirasi. Cek koneksi internet Anda.");
+        console.error(err);
+
+        if (btn) {
+            btn.innerText = "Kirim Aspirasi Sekarang";
+            btn.disabled = false;
+        }
+
+        alert("Gagal mengirim aspirasi.");
     });
 }
 
