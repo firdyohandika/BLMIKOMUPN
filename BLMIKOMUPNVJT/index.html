@@ -1516,7 +1516,6 @@
     </section> 
 </div> 
 
- <!-- ================= HALAMAN ASPIRASI ================= -->
 <!-- ================= HALAMAN ASPIRASI ================= -->
 <div id="aspirasi" class="halaman hidden"> 
   <!-- Jarak atas diturunkan jauh dengan pt-32 -->
@@ -1715,10 +1714,11 @@ const SCRIPT_URL_API = 'https://script.google.com/macros/s/AKfycbzEWvh2HM0V-F9g_
 // 1. KIRIM ASPIRASI
 function submitAspirasi(event) {
     event.preventDefault();
-    const btn = document.getElementById('btnSubmit');
-    if(btn) { btn.innerText = "Mengirim..."; btn.disabled = true; }
 
-    const formElement = document.getElementById('formAspirasi');
+    const formElement = event.target;
+    const formData = new FormData(formElement);
+
+    const formElement = document.getElementById('formInputAspirasi');
     const formData = new FormData(formElement);
     const urlEncoded = new URLSearchParams(formData);
 
