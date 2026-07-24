@@ -606,41 +606,58 @@
 <!-- ================= HALAMAN TENTANG ====================== -->
 <div id="tentang" class="halaman">
     
-    <!-- 1. Header Banner dengan Logo -->
-    <div class="max-w-[1200px] mx-auto px-6 mt-8 mb-14">
-      <div class="bg-maroon rounded-3xl p-10 md:p-16 relative overflow-hidden text-white shadow-xl">
+    <!-- Header Banner -->
+    <section class="px-6 pt-10">
+        <div class="max-w-[1400px] mx-auto">
+            <div class="relative overflow-hidden rounded-[32px] bg-maroon shadow-2xl">
+                
+                <!-- Logo Watermark di Kanan -->
+                <img src="https://drive.google.com/thumbnail?id=1xpvGwKgsOgLzdWHGxkQ_lMT4IWUUPdVD&sz=w500" 
+                     class="absolute right-0 top-0 h-full opacity-10 object-contain pointer-events-none">
+
+                <div class="px-12 md:px-20 py-20 relative z-10">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-white leading-tight">
+                        Tentang Parlemen Vaktavya
+                    </h1>
+
+                    <div class="flex items-center gap-2 mt-5 text-white">
+                        <button onclick="bukaHalaman('beranda')" class="hover:underline">
+                            Home
+                        </button>
+                        <span>/</span>
+                        <span class="font-semibold">
+                            Tentang
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Bagian Sejarah dengan Jarak Atas yang Lebih Turun -->
+<div class="max-w-[1200px] mx-auto px-6 mt-16 mb-16">
+    <!-- Menggunakan items-start agar sejajar dari atas -->
+    <div class="grid md:grid-cols-2 gap-10 items-start">
         
-        <!-- Elemen Logo Samar di Kanan (Sekarang Menggunakan Logo Asli) -->
-        <div class="absolute right-[-10%] top-[-20%] opacity-10 w-96 h-96 flex items-center justify-center">
-          <img src="https://drive.google.com/thumbnail?id=1xpvGwKgsOgLzdWHGxkQ_lMT4IWUUPdVD&sz=w500" alt="Parlemen Vaktavya Logo Watermark" class="w-full h-full object-contain">
-        </div>
-
-        <div class="relative z-10">
-          <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Tentang<br>Parlemen Vaktavya</h1>
-          <p class="text-sm font-medium opacity-80 flex items-center gap-2">
-            <button onclick="bukaHalaman('beranda')" class="hover:underline">Home</button> 
-            <span>/</span> 
-            <span>Tentang</span>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. Bagian Sejarah -->
-    <div class="max-w-[1200px] mx-auto px-6 mb-16">
-      <div class="grid md:grid-cols-2 gap-10 items-center">
+        <!-- Kolom Teks -->
         <div class="order-2 md:order-1">
-          <h2 class="text-2xl font-bold text-gray-900 mb-4">Sejarah</h2>
-          <p class="text-gray-600 leading-relaxed text-sm md:text-base text-justify">
-            Badan Legislatif Mahasiswa Ilmu Komunikasi Periode 2025 hadir sebagai lembaga legislatif yang representatif, responsif, dan proaktif dalam mewadahi aspirasi serta kebutuhan KM IKOM.
-            Dengan komitmen pada komunikasi yang aktif, transparansi yang terbuka, dan pengawasan yang konsisten, BLM IKOM berupaya mengoptimalkan fungsi legislasi, menjadi ruang aman bagi aspirasi mahasiswa, serta memastikan setiap kebijakan berjalan secara akuntabel dan tepat sasaran.
-          </p>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Sejarah</h2>
+            <p class="text-gray-600 leading-relaxed text-sm md:text-base text-justify">
+                Badan Legislatif Mahasiswa Ilmu Komunikasi Periode 2025 hadir sebagai lembaga legislatif yang representatif, responsif, dan proaktif dalam mewadahi aspirasi serta kebutuhan KM IKOM.
+                Dengan komitmen pada komunikasi yang aktif, transparansi yang terbuka, dan pengawasan yang konsisten, BLM IKOM berupaya mengoptimalkan fungsi legislasi, menjadi ruang aman bagi aspirasi mahasiswa, serta memastikan setiap kebijakan berjalan secara akuntabel dan tepat sasaran.
+            </p>
         </div>
+
+        <!-- Kolom Gambar dengan Animasi Hover -->
         <div class="order-1 md:order-2">
-          <img src="https://drive.google.com/thumbnail?id=1UhTzQwjw4C0Bb_N_m-_bLvHPOL_w1t5n&sz=w1920" alt="Parlemen Vaktavya" class="w-full rounded-2xl shadow-md object-cover h-64 md:h-80">
+            <img src="https://drive.google.com/thumbnail?id=1UhTzQwjw4C0Bb_N_m-_bLvHPOL_w1t5n&sz=w1920" 
+                 alt="Parlemen Vaktavya" 
+                 class="w-full rounded-2xl shadow-md object-cover h-64 md:h-80 transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-xl cursor-pointer">
         </div>
-      </div>
+
     </div>
+</div>
 
     <!-- 3. Visi & Misi Cards -->
     <div class="max-w-[1200px] mx-auto px-6 mb-20 flex flex-col gap-6">
