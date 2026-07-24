@@ -1,11 +1,50 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <!-- ================= DASAR ================= -->
   <base target="_top">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
+  <!-- ================= SEO ================= -->
+  <title>BLM IKOM UPN Veteran Jawa Timur | Parlemen Vaktavya</title>
+
+  <meta name="description" content="Website resmi Badan Legislatif Mahasiswa Program Studi Ilmu Komunikasi UPN Veteran Jawa Timur. Menyediakan informasi kepengurusan, program kerja, berita, galeri, dokumen, dan portal aspirasi mahasiswa.">
+
+  <meta name="keywords" content="BLM IKOM, Parlemen Vaktavya, BLM UPN Veteran Jawa Timur, Ilmu Komunikasi UPN, Aspirasi Mahasiswa, Badan Legislatif Mahasiswa">
+
+  <meta name="author" content="BLM IKOM UPN Veteran Jawa Timur">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#7B1113">
+
+  <link rel="canonical" href="https://blmikomupnvjt.web.id/">
+
+  <!-- ================= OPEN GRAPH ================= -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BLM IKOM UPN Veteran Jawa Timur">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:title" content="BLM IKOM UPN Veteran Jawa Timur | Parlemen Vaktavya">
+  <meta property="og:description" content="Website resmi Badan Legislatif Mahasiswa Program Studi Ilmu Komunikasi UPN Veteran Jawa Timur.">
+  <meta property="og:url" content="https://blmikomupnvjt.web.id/">
+  <meta property="og:image" content="https://blmikomupnvjt.web.id/android-chrome-512x512.png">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
+
+  <!-- ================= FAVICON ================= -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <!-- ================= FONT ================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- ================= TAILWIND ================= -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <script>
     tailwind.config = {
       theme: {
@@ -15,88 +54,105 @@
             dark: '#1A1A1A'
           },
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
+            sans: ['Inter', 'sans-serif']
           }
         }
       }
     }
   </script>
-  
+
+  <!-- ================= STYLE ================= -->
   <style>
-  /* 1. CSS Animasi Pergantian Halaman (Super Mulus) */
-  .halaman { display: none; }
-  .halaman.aktif { 
-    display: block; 
-    animation: fadeInPage 0.4s ease-out forwards; 
-  }
-  
-  @keyframes fadeInPage {
-    0% { opacity: 0; transform: translateY(15px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-  
-  /* 2. Efek garis bawah pada menu aktif */
-  .nav-link.aktif { 
-    color: #7B1113; 
-    border-bottom: 2px solid #7B1113; 
-    padding-bottom: 4px; 
-  }
 
-  /* 3. Animasi Khusus untuk Elemen Melayang (Floating Stats dll) */
-  @keyframes fadeInUp {
-  from { 
-    opacity: 0; 
-    transform: translateY(40px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
-  }
-}
+    /* Halaman */
+    .halaman {
+      display: none;
+    }
 
-.animasi-muncul {
-  opacity: 0; /* Pastikan ini ada agar benar-benar tak terlihat di awal */
-  animation: fadeInUp 0.8s ease-out forwards;
-}
-  
-  .hidden { display: none; }
+    .halaman.aktif {
+      display: block;
+      animation: fadeInPage .4s ease-out forwards;
+    }
 
-  /* 4. Pengaturan Scrollbar & Layout Utama */
-  .hide-scroll-bar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .hide-scroll-bar::-webkit-scrollbar {
-    display: none;
-  }
+    @keyframes fadeInPage {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-  /* Mencegah halaman bergeser ke samping (horizontal scroll) */
-  html, body {
-    max-width: 100%;
-    overflow-x: hidden !important;
-  }
+    /* Animasi Muncul */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-  /* 5. Efek Garis Bawah Navigasi (Hover Animation) */
-  .nav-link {
-    position: relative;
-    transition: color 0.3s ease;
-  }
-  
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -4px;
-    left: 0;
-    background-color: #6B1D2F; /* Warna maroon khas Vaktavya */
-    transition: width 0.3s ease-in-out;
-  }
-  
-  .nav-link:hover::after {
-    width: 100%;
-  }
-</style>
+    .animasi-muncul {
+      opacity: 0;
+      animation: fadeInUp .8s ease-out forwards;
+    }
+
+    /* Navigasi */
+    .nav-link {
+      position: relative;
+      transition: color .3s ease;
+    }
+
+    .nav-link.aktif {
+      color: #7B1113;
+      border-bottom: 2px solid #7B1113;
+      padding-bottom: 4px;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      background: #7B1113;
+      transition: width .3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Scrollbar */
+    .hide-scroll-bar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .hide-scroll-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Layout */
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+  </style>
+
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans overflow-x-hidden">
 
