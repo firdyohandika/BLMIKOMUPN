@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.blmikomupnvjt.web.id/sitemap.xml
+Sitemap: https://blmikomupnvjt.web.id/sitemap.xml
