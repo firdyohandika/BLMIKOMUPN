@@ -1888,12 +1888,13 @@ function cariLaporan() {
 
 // 3. MUAT DOKUMEN (API FETCH)
 function muatDokumen() {
-    fetch(SCRIPT_URL_API + "?action=dokumen")
+    // Menambahkan timestamp acak agar browser selalu menarik data terbaru dari server (Anti-Cache)
+    const waktuSekarang = new Date().getTime();
+    fetch(SCRIPT_URL_API + "?action=dokumen&t=" + waktuSekarang)
       .then(res => res.json())
       .then(data => {
-         // Memanggil 2 fungsi perakit HTML di bawah
-         try { tampilkanDokumen(data); } catch(e) { console.error(e); }
-         try { tampilkanBerita(data); } catch(e) { console.error(e); }
+         try { tampilkanDokumen(data); } catch(e) { console.error("Error Dokumen:", e); }
+         try { tampilkanBerita(data); } catch(e) { console.error("Error Berita:", e); }
       })
       .catch(err => {
          const wadah = document.getElementById("wadah-dokumen");
@@ -1901,26 +1902,61 @@ function muatDokumen() {
       });
 }
 
+// FUNGSI PEMBANTU: Mengurutkan Tanggal (WAJIB ADA AGAR BERITA BARU MUNCUL)
+function urutkanDataTerbaru(dataArray) {
+    if (!dataArray || dataArray.length === 0) return [];
+    
+    let dataSalinan = [...dataArray];
+    
+    return dataSalinan.sort(function(a, b) {
+        function konversiKeAngka(tglStr) {
+            if (!tglStr) return 0;
+            const bulanIndo = {
+                'januari': 0, 'jan': 0, 'februari': 1, 'feb': 1, 'maret': 2, 'mar': 2, 'april': 3, 'apr': 3,
+                'mei': 4, 'juni': 5, 'jun': 5, 'juli': 6, 'jul': 6, 'agustus': 7, 'agu': 7, 'ags': 7, 
+                'september': 8, 'sep': 8, 'oktober': 9, 'okt': 9, 'november': 10, 'nov': 10, 'desember': 11, 'des': 11
+            };
+            let str = tglStr.toString().toLowerCase().trim();
+            let bagian = str.split(/\s+/); // Memecah berdasarkan spasi (mengabaikan spasi ganda)
+            
+            if (bagian.length >= 3) {
+                let hari = parseInt(bagian[0]);
+                let bulan = bulanIndo[bagian[1]];
+                let tahun = parseInt(bagian[2]);
+                if (bulan !== undefined && !isNaN(hari) && !isNaN(tahun)) {
+                    return new Date(tahun, bulan, hari).getTime();
+                }
+            }
+            let hasil = new Date(tglStr).getTime();
+            return isNaN(hasil) ? 0 : hasil;
+        }
+        // Urutkan dari terbesar (terbaru) ke terkecil (terlama) berdasarkan kolom C (index 2)
+        return konversiKeAngka(b[2]) - konversiKeAngka(a[2]); 
+    });
+}
+
+
 // 4. RAKIT HTML UNTUK HALAMAN DOKUMEN (DESAIN LIST)
-function tampilkanDokumen(data) {
+function tampilkanDokumen(dataMentah) {
     const wadah = document.getElementById("wadah-dokumen");
     if (!wadah) return; 
 
-    if (!data || data.length === 0) {
+    if (!dataMentah || dataMentah.length === 0) {
         wadah.innerHTML = `<div class="text-center py-12 text-gray-500 font-medium">Belum ada dokumen atau rilis diterbitkan.</div>`;
         return;
     }
 
+    // TERAPKAN PENGURUTAN DI SINI
+    const data = urutkanDataTerbaru(dataMentah);
+
     let html = '';
     data.forEach(baris => {
-        // Menggunakan urutan kolom terbaru seperti di halaman berita
         const kategori = baris[0] || 'Kategori'; 
         const judul = baris[1] || 'Tanpa Judul';
         const tanggal = baris[2] || '-';
         const link = baris[3] || '#';
-        const fotoMentah = baris[4] || baris[5] || ''; // Kolom Gambar
+        const fotoMentah = baris[4] || baris[5] || ''; 
 
-        // Konversi link Google Drive ke CDN anti-blokir
         let fotoURL = fotoMentah;
         if (fotoMentah.includes("drive.google.com")) {
             let fileId = "";
@@ -1929,79 +1965,60 @@ function tampilkanDokumen(data) {
             } else if (fotoMentah.includes("id=")) {
                 fileId = fotoMentah.split("id=")[1].split("&")[0];
             }
-            
-            if (fileId) {
-                fotoURL = `https://lh3.googleusercontent.com/d/${fileId}`;
-            }
+            if (fileId) fotoURL = `https://lh3.googleusercontent.com/d/${fileId}`;
         }
 
-        // Elemen Foto (Bentuk kotak persegi / squircle)
         const elemenFoto = fotoURL 
             ? `<img src="${fotoURL}" alt="${judul}" referrerpolicy="no-referrer" class="w-full md:w-[150px] h-[150px] object-cover rounded-3xl flex-shrink-0 border border-gray-100 shadow-sm">` 
             : `<div class="w-full md:w-[150px] h-[150px] bg-gray-50 rounded-3xl flex items-center justify-center flex-shrink-0 border border-gray-100"><span class="text-gray-400 text-xs font-medium">Tanpa Foto</span></div>`;
 
         html += `
         <div class="flex flex-col md:flex-row items-start md:items-center gap-6 p-6 md:p-8 hover:bg-red-50/30 transition-colors duration-300">
-            
-            <!-- Kotak Gambar Kiri -->
             ${elemenFoto}
-
-            <!-- Info Teks Tengah -->
             <div class="flex flex-col flex-grow">
                 <div class="mb-3">
                     <span class="bg-red-50 text-[#8B0000] text-[11px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-widest">
                         ${kategori}
                     </span>
                 </div>
-                
-                <h3 class="text-xl md:text-2xl font-black text-gray-900 mb-2 leading-tight">
-                    ${judul}
-                </h3>
-                
-                <p class="text-sm text-gray-500 font-medium">
-                    Diperbarui : ${tanggal}
-                </p>
+                <h3 class="text-xl md:text-2xl font-black text-gray-900 mb-2 leading-tight">${judul}</h3>
+                <p class="text-sm text-gray-500 font-medium">Diperbarui : ${tanggal}</p>
             </div>
-
-            <!-- Tombol Kanan -->
             <div class="flex-shrink-0 mt-4 md:mt-0 w-full md:w-auto">
                 <a href="${link}" target="_blank" rel="noopener noreferrer" class="block w-full md:w-auto text-center px-8 py-3 bg-white border border-[#8B0000] text-[#8B0000] hover:bg-[#8B0000] hover:text-white rounded-full font-bold transition-all duration-300 shadow-sm hover:shadow-md">
                     Baca Dokumen
                 </a>
             </div>
-
         </div>
         `;
     });
-
-    // Masukkan data ke HTML (otomatis menimpa div loading)
     wadah.innerHTML = html;
 }
 
 // 5. RAKIT HTML UNTUK BERITA DI BERANDA (BARU)
-// 5. RAKIT HTML UNTUK BERITA DI BERANDA (DENGAN FOTO)
-// 5. RAKIT HTML UNTUK BERITA DI BERANDA (DESAIN FINAL)
-// 5. RAKIT HTML UNTUK BERITA DI BERANDA (FIX GAMBAR GOOGLE DRIVE)
-function tampilkanBerita(data) {
+function tampilkanBerita(dataMentah) {
     const wadah = document.getElementById("wadah-berita");
     if (!wadah) return; 
 
-    if (!data || data.length === 0) {
+    if (!dataMentah || dataMentah.length === 0) {
         wadah.innerHTML = `<div class="col-span-full text-center py-8 text-gray-500">Belum ada berita terbaru.</div>`;
         return;
     }
 
-    let html = '';
-    const beritaTerbaru = data.slice(0, 3); // Ambil 3 berita teratas
+    // TERAPKAN PENGURUTAN DI SINI
+    const dataYangSudahDiurutkan = urutkanDataTerbaru(dataMentah);
     
+    // Ambil 3 berita teratas dari data yang sudah diurutkan!
+    const beritaTerbaru = dataYangSudahDiurutkan.slice(0, 3); 
+    
+    let html = '';
     beritaTerbaru.forEach(baris => {
         const kategori = baris[0] || 'Kategori'; 
         const judul = baris[1] || 'Tanpa Judul';
         const tanggal = baris[2] || '-';
         const link = baris[3] || '#';
-        const fotoMentah = baris[4] || baris[5] || ''; // Mengambil link dari Kolom E
+        const fotoMentah = baris[4] || baris[5] || ''; 
 
-        // Trik baru: Mengubah link Google Drive menjadi link CDN Anti-Block
         let fotoURL = fotoMentah;
         if (fotoMentah.includes("drive.google.com")) {
             let fileId = "";
@@ -2010,46 +2027,30 @@ function tampilkanBerita(data) {
             } else if (fotoMentah.includes("id=")) {
                 fileId = fotoMentah.split("id=")[1].split("&")[0];
             }
-            
-            if (fileId) {
-                // Format CDN resmi Google Drive yang anti-blokir
-                fotoURL = `https://lh3.googleusercontent.com/d/${fileId}`;
-            }
+            if (fileId) fotoURL = `https://lh3.googleusercontent.com/d/${fileId}`;
         }
 
-        // Elemen Foto
         const elemenFoto = fotoURL 
             ? `<img src="${fotoURL}" alt="${judul}" referrerpolicy="no-referrer" class="w-full h-44 object-cover rounded-xl transition-transform duration-500 group-hover:scale-105">` 
             : `<div class="w-full h-44 bg-gray-100 flex items-center justify-center rounded-xl"><span class="text-gray-400 text-xs">Tidak ada foto</span></div>`;
 
         html += `
         <a href="${link}" target="_blank" rel="noopener noreferrer" class="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md hover:border-red-200 transition-all duration-300 flex flex-col h-full group">
-            
-            <!-- Kotak Foto -->
             <div class="mb-4 rounded-xl overflow-hidden bg-gray-50">
                 ${elemenFoto}
             </div>
-            
-            <!-- Konten Teks -->
             <div class="flex flex-col flex-grow px-2 pb-2">
                 <div class="mb-3">
                     <span class="bg-red-50 text-[#8B0000] text-[10px] font-bold px-2.5 py-1.5 rounded-md uppercase tracking-wider">
                         ${kategori}
                     </span>
                 </div>
-                
-                <h3 class="text-sm md:text-base font-bold text-gray-900 mb-3 line-clamp-2 leading-snug group-hover:text-[#8B0000] transition-colors">
-                    ${judul}
-                </h3>
-                
-                <p class="text-xs text-gray-400 mt-auto font-medium">
-                    ${tanggal}
-                </p>
+                <h3 class="text-sm md:text-base font-bold text-gray-900 mb-3 line-clamp-2 leading-snug group-hover:text-[#8B0000] transition-colors">${judul}</h3>
+                <p class="text-xs text-gray-400 mt-auto font-medium">${tanggal}</p>
             </div>
         </a>
         `;
     });
-
     wadah.innerHTML = html;
 }
 
