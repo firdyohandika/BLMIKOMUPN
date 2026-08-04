@@ -42,8 +42,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
   <script>
     tailwind.config = {
@@ -640,88 +642,90 @@
           </div>
 
           <div class="w-full lg:w-2/3 min-w-0 overflow-hidden">
-            <div id="slider-profil"
-              class="flex gap-6 overflow-x-auto pb-8 pt-2 px-2 hide-scroll-bar snap-x snap-mandatory cursor-grab">
+  <!-- Container Utama Swiper -->
+  <div class="swiper slider-profil !pb-8 !pt-2 !px-2">
+    
+    <!-- Wrapper Swiper -->
+    <div class="swiper-wrapper">
 
-              <!-- Ketua Umum -->
-              <div
-                class="min-w-[240px] w-[240px] bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center snap-center hover:shadow-xl transition-all shrink-0">
-                <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-                  <img src="https://drive.google.com/thumbnail?id=1JDE62dt_BbTu8jXfi8pKGTJJLlN26klH&sz=w1000" alt="Nama"
-                    class="w-full h-full object-cover object-top">
-                </div>
-                <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Muhammad Zidan Nurroyyan</h4>
-                <p class="text-xs font-semibold text-maroon">Ketua Umum</p>
-              </div>
-               
-              <!-- SekJen -->
-              <div
-                class="min-w-[240px] w-[240px] bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center snap-center hover:shadow-xl transition-all shrink-0">
-                <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-                  <img src="https://drive.google.com/thumbnail?id=1TcYkegXi1riP6_PMCnvN_Ux422keML2n&sz=w1000" alt="Nama"
-                    class="w-full h-full object-cover object-top">
-                </div>
-                <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Esther Elizabeth</h4>
-                <p class="text-xs font-semibold text-maroon">Sekretaris Jendral</p>
-              </div>
-
-              <!-- Komisi 1 -->
-              <div
-                class="min-w-[240px] w-[240px] bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center snap-center hover:shadow-xl transition-all shrink-0">
-                <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-                  <img src="https://drive.google.com/thumbnail?id=1DAJAXKN7E8TcqF1yQYxzrs7elF5-eiS4&sz=w1000" alt="Nama"
-                    class="w-full h-full object-cover object-top">
-                </div>
-                <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Ghitrof Fadawkas Z.</h4>
-                <p class="text-xs font-semibold text-maroon">Ketua Komisi 1</p>
-              </div>
-
-              <!-- Komisi 2 -->
-              <div
-                class="min-w-[240px] w-[240px] bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center snap-center hover:shadow-xl transition-all shrink-0">
-                <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-                  <img src="https://drive.google.com/thumbnail?id=1_BdAzILDYjyE3kEywCX8Qd3pMZLyo-jr&sz=w1000" alt="Nama"
-                    class="w-full h-full object-cover object-top">
-                </div>
-                <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Aidden Raditya</h4>
-                <p class="text-xs font-semibold text-maroon">Ketua Komisi 2</p>
-              </div>
-
-              <!-- Komisi 3 -->
-              <div
-                class="min-w-[240px] w-[240px] bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center snap-center hover:shadow-xl transition-all shrink-0">
-                <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-                  <img src="https://drive.google.com/thumbnail?id=1V6z1EBgnZ3eCTN829mCP7ACsngNl22Hq&sz=w1000" alt="Nama"
-                    class="w-full h-full object-cover object-top">
-                </div>
-                <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Adelia Indri</h4>
-                <p class="text-xs font-semibold text-maroon">Ketua Komisi 3</p>
-              </div>
-
-              <!-- Legislasi -->
-              <div
-                class="min-w-[240px] w-[240px] bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center snap-center hover:shadow-xl transition-all shrink-0">
-                <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-                  <img src="https://drive.google.com/thumbnail?id=1h98CBTvfXkBcfOd-WuG3OCUFiIzrd4d-&sz=w1000" alt="Nama"
-                    class="w-full h-full object-cover object-top">
-                </div>
-                <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Muhammad Dzaky Pewira</h4>
-                <p class="text-xs font-semibold text-maroon">Ketua Biro Legislasi</p>
-              </div>
-
-              <!-- Medinfo -->
-              <div
-                class="min-w-[240px] w-[240px] bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center snap-center hover:shadow-xl transition-all shrink-0">
-                <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-                  <img src="https://drive.google.com/thumbnail?id=19yYpqmN-3MQgfVFE2hQgldu5dOXhrTYi&sz=w1000" alt="Nama"
-                    class="w-full h-full object-cover object-top">
-                </div>
-                <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Annizar Hamdani</h4>
-                <p class="text-xs font-semibold text-maroon">Ketua Biro Medinfo</p>
-              </div>
-            </div>
+      <!-- Slide: Ketua Umum -->
+      <div class="swiper-slide w-[240px]">
+        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+            <img src="https://drive.google.com/thumbnail?id=1JDE62dt_BbTu8jXfi8pKGTJJLlN26klH&sz=w1000" alt="Muhammad Zidan" class="w-full h-full object-cover object-top">
           </div>
+          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Muhammad Zidan Nurroyyan</h4>
+          <p class="text-xs font-semibold text-[#B00000]">Ketua Umum</p>
         </div>
+      </div>
+       
+      <!-- Slide: SekJen -->
+      <div class="swiper-slide w-[240px]">
+        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+            <img src="https://drive.google.com/thumbnail?id=1TcYkegXi1riP6_PMCnvN_Ux422keML2n&sz=w1000" alt="Esther Elizabeth" class="w-full h-full object-cover object-top">
+          </div>
+          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Esther Elizabeth</h4>
+          <p class="text-xs font-semibold text-[#B00000]">Sekretaris Jendral</p>
+        </div>
+      </div>
+
+      <!-- Slide: Komisi 1 -->
+      <div class="swiper-slide w-[240px]">
+        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+            <img src="https://drive.google.com/thumbnail?id=1DAJAXKN7E8TcqF1yQYxzrs7elF5-eiS4&sz=w1000" alt="Ghitrof Fadawkas" class="w-full h-full object-cover object-top">
+          </div>
+          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Ghitrof Fadawkas Z.</h4>
+          <p class="text-xs font-semibold text-[#B00000]">Ketua Komisi 1</p>
+        </div>
+      </div>
+
+      <!-- Slide: Komisi 2 -->
+      <div class="swiper-slide w-[240px]">
+        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+            <img src="https://drive.google.com/thumbnail?id=1_BdAzILDYjyE3kEywCX8Qd3pMZLyo-jr&sz=w1000" alt="Aidden Raditya" class="w-full h-full object-cover object-top">
+          </div>
+          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Aidden Raditya</h4>
+          <p class="text-xs font-semibold text-[#B00000]">Ketua Komisi 2</p>
+        </div>
+      </div>
+
+      <!-- Slide: Komisi 3 -->
+      <div class="swiper-slide w-[240px]">
+        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+            <img src="https://drive.google.com/thumbnail?id=1V6z1EBgnZ3eCTN829mCP7ACsngNl22Hq&sz=w1000" alt="Adelia Indri" class="w-full h-full object-cover object-top">
+          </div>
+          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Adelia Indri</h4>
+          <p class="text-xs font-semibold text-[#B00000]">Ketua Komisi 3</p>
+        </div>
+      </div>
+
+      <!-- Slide: Legislasi -->
+      <div class="swiper-slide w-[240px]">
+        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+            <img src="https://drive.google.com/thumbnail?id=1h98CBTvfXkBcfOd-WuG3OCUFiIzrd4d-&sz=w1000" alt="Muhammad Dzaky" class="w-full h-full object-cover object-top">
+          </div>
+          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Muhammad Dzaky Pewira</h4>
+          <p class="text-xs font-semibold text-[#B00000]">Ketua Biro Legislasi</p>
+        </div>
+      </div>
+
+      <!-- Slide: Medinfo -->
+      <div class="swiper-slide w-[240px]">
+        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+            <img src="https://drive.google.com/thumbnail?id=19yYpqmN-3MQgfVFE2hQgldu5dOXhrTYi&sz=w1000" alt="Annizar Hamdani" class="w-full h-full object-cover object-top">
+          </div>
+          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Annizar Hamdani</h4>
+          <p class="text-xs font-semibold text-[#B00000]">Ketua Biro Medinfo</p>
+        </div>
+      </div>
+    </div>
+  </div>
       </section>
     </div>
 
@@ -2024,7 +2028,7 @@
         </div>
       </div>
       <div class="max-w-6xl mx-auto mt-12 pt-8 border-t border-white/20 text-center text-xs opacity-70">
-        &copy; 2026 Parlemen Vaktavya. Seluruh hak cipta dilindungi.
+        &copy; 2026 BLM IKOM UPNVJT Biro Medinfo.
       </div>
     </footer>
 
@@ -2490,6 +2494,12 @@
 
         track.style.transform = `translateX(-${posisiSlideSaatIni * 100}%)`;
       }
+      const swiperProfil = new Swiper('.slider-profil', {
+    slidesPerView: 'auto', // Membiarkan lebar slide diatur oleh CSS (240px)
+    spaceBetween: 24,      // Jarak antar kartu (setara gap-6 di Tailwind)
+    grabCursor: true,      // Kursor berubah jadi tangan saat di-hover
+    freeMode: true,        // Scroll bebas dan halus (tidak patah-patah ke tengah)
+  });
     </script>
 </body>
 
