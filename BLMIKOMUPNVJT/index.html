@@ -10,6 +10,7 @@
     font-family: 'Poppins', sans-serif !important;
   }
 </style>
+
 <head>
   <base target="_top">
   <meta charset="UTF-8">
@@ -1046,7 +1047,6 @@
             <div
               class="overflow-hidden rounded-[40px] shadow-2xl relative aspect-[4/3] md:aspect-[21/9] bg-gray-200 border-4 border-white">
               <div id="slider-track" class="flex transition-transform duration-700 ease-in-out h-full w-full">
-                <!-- Slide 1 -->
                 <div class="min-w-full h-full relative">
                   <img src="https://drive.google.com/thumbnail?id=14WP10YBwWX2pu2FS-ax2f8WEJ_nIEHnf&sz=w1000"
                     class="w-full h-full object-cover">
@@ -1115,7 +1115,7 @@
               class="w-[45%] sm:w-[45%] md:w-[22%] bg-white rounded-[32px] p-3 shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 group hover:-translate-y-2">
               <div
                 class="w-full aspect-square md:aspect-[4/5] bg-gray-100 rounded-[24px] mb-4 overflow-hidden relative">
-                <img src="https://drive.google.com/thumbnail?id=1BZjzEFLo1ehMZn4vt_fAgbgEmGicY9hG&sz=w1000"
+                <img src="https://drive.google.com/thumbnail?id=1PQ0fKWJIAIL1A_raHAuQfTIwgRLFLUiS&sz=w1000"
                   class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
               </div>
               <div class="text-center pb-2">
@@ -1128,7 +1128,7 @@
               class="w-[45%] sm:w-[45%] md:w-[22%] bg-white rounded-[32px] p-3 shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 group hover:-translate-y-2">
               <div
                 class="w-full aspect-square md:aspect-[4/5] bg-gray-100 rounded-[24px] mb-4 overflow-hidden relative">
-                <img src="https://drive.google.com/thumbnail?id=1PQ0fKWJIAIL1A_raHAuQfTIwgRLFLUiS&sz=w1000"
+                <img src="https://drive.google.com/thumbnail?id=1BZjzEFLo1ehMZn4vt_fAgbgEmGicY9hG&sz=w1000"
                   class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
               </div>
               <div class="text-center pb-2">
@@ -1992,6 +1992,7 @@
         &copy; 2026 Parlemen Vaktavya. Seluruh hak cipta dilindungi.
       </div>
     </footer>
+
     <script>
       function bukaHalaman(idHalaman, elemenTombol = null, dariTombolBack = false) {
         const semuaHalaman = document.querySelectorAll('.halaman');
@@ -2046,12 +2047,12 @@
         const urlEncoded = new URLSearchParams(formData);
 
         fetch(SCRIPT_URL_API, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: urlEncoded.toString()
-          })
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: urlEncoded.toString()
+        })
           .then(res => res.json())
           .then(hasil => {
             if (btn) {
@@ -2115,7 +2116,7 @@
               if (statusText.includes("proses") || statusText.includes("kaji") || statusText.includes("antre")) {
                 statusWarna = "bg-yellow-100 text-yellow-700 border border-yellow-200";
               } else if (statusText.includes("selesai") || statusText.includes("tuntas") || statusText.includes(
-                  "diterima")) {
+                "diterima")) {
                 statusWarna = "bg-green-100 text-green-700 border border-green-200";
               }
 
@@ -2437,6 +2438,23 @@
           slider.scrollLeft = scrollLeft - walk;
         });
       });
+
+      let posisiSlideSaatIni = 0;
+
+      function geserSlide(arah) {
+        const track = document.getElementById('slider-track');
+        const jumlahSlide = track.children.length;
+
+        posisiSlideSaatIni += arah;
+
+        if (posisiSlideSaatIni >= jumlahSlide) {
+          posisiSlideSaatIni = 0;
+        } else if (posisiSlideSaatIni < 0) {
+          posisiSlideSaatIni = jumlahSlide - 1;
+        }
+
+        track.style.transform = `translateX(-${posisiSlideSaatIni * 100}%)`;
+      }
     </script>
 </body>
 
