@@ -155,7 +155,6 @@
 
 <body class="bg-gray-50 text-gray-900 font-sans overflow-x-hidden">
 
-  <!-- ================= LAYAR INTRO ANIMASI DIVISI ================= -->
   <div id="intro-animasi"
     class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-700">
     <!-- Logo Intro -->
@@ -167,7 +166,6 @@
       NAMA DIVISI
     </h2>
   </div>
-  <!-- ============================================================== -->
 
   <main class="flex-1">
 
@@ -685,10 +683,7 @@
           </div>
 
           <div class="w-full lg:w-2/3 min-w-0 overflow-hidden">
-            <!-- Container Utama Swiper -->
             <div class="swiper slider-profil !pb-8 !pt-2 !px-2">
-
-              <!-- Wrapper Swiper -->
               <div class="swiper-wrapper">
 
                 <!-- Slide: Ketua Umum -->
@@ -2318,7 +2313,7 @@
             let hasil = new Date(tglStr).getTime();
             return isNaN(hasil) ? 0 : hasil;
           }
-          // Urutkan dari terbesar (terbaru) ke terkecil (terlama) berdasarkan kolom C (index 2)
+
           return konversiKeAngka(b[2]) - konversiKeAngka(a[2]);
         });
       }
@@ -2552,54 +2547,49 @@
         track.style.transform = `translateX(-${posisiSlideSaatIni * 100}%)`;
       }
       const swiperProfil = new Swiper('.slider-profil', {
-        slidesPerView: 'auto', // Membiarkan lebar slide diatur oleh CSS (240px)
-        spaceBetween: 24,      // Jarak antar kartu (setara gap-6 di Tailwind)
-        grabCursor: true,      // Kursor berubah jadi tangan saat di-hover
-        freeMode: true,        // Scroll bebas dan halus (tidak patah-patah ke tengah)
+        slidesPerView: 'auto', 
+        spaceBetween: 24,      
+        grabCursor: true,      
+        freeMode: true,       
       });
-      // ================= SCRIPT UNTUK INTRO ANIMASI DIVISI =================
+      
       function bukaDenganIntro(idTarget, urlLogo, namaDivisi) {
         const introAnimasi = document.getElementById('intro-animasi');
         const introLogo = document.getElementById('intro-logo');
         const introTeks = document.getElementById('intro-teks');
 
-        // 1. Siapkan Logo dan Teks sesuai divisi yang diklik
+        
         introLogo.src = urlLogo;
         introTeks.innerText = namaDivisi;
 
-        // 2. Munculkan Layar Intro (Fade In)
+       
         introAnimasi.classList.remove('opacity-0', 'pointer-events-none');
         introAnimasi.classList.add('opacity-100');
 
-        // Animasi logo membesar (Zoom In)
+        
         introLogo.classList.remove('scale-50');
         introLogo.classList.add('scale-100');
 
-        // Animasi teks muncul
+       
         introTeks.classList.remove('opacity-0');
         introTeks.classList.add('opacity-100');
 
-        // 3. Jeda waktu sebelum pindah halaman (1500 ms = 1.5 detik)
         setTimeout(() => {
 
-          // --> Panggil fungsi buka halaman & divisi yang sudah Anda miliki sebelumnya
           bukaHalaman('kepengurusan');
           bukaDivisi(idTarget);
 
-          // Gulir ke paling atas secara instan di belakang layar
           window.scrollTo(0, 0);
 
-          // 4. Hilangkan Layar Intro (Fade Out)
           introAnimasi.classList.remove('opacity-100');
           introAnimasi.classList.add('opacity-0', 'pointer-events-none');
 
-          // Kembalikan ukuran logo untuk animasi berikutnya
           introLogo.classList.remove('scale-100');
           introLogo.classList.add('scale-50');
           introTeks.classList.remove('opacity-100');
           introTeks.classList.add('opacity-0');
 
-        }, 1500); // Anda bisa mengubah angka ini jika animasinya terasa terlalu lama/cepat
+        }, 1500); 
       }
     </script>
 </body>
