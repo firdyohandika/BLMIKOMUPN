@@ -151,7 +151,24 @@
 
 </head>
 
+</head>
+
 <body class="bg-gray-50 text-gray-900 font-sans overflow-x-hidden">
+
+  <!-- ================= LAYAR INTRO ANIMASI DIVISI ================= -->
+  <div id="intro-animasi"
+    class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-700">
+    <!-- Logo Intro -->
+    <img id="intro-logo" src="" alt="Logo Divisi"
+      class="w-48 h-48 object-contain transform scale-50 transition-transform duration-700 ease-out">
+    <!-- Teks Intro -->
+    <h2 id="intro-teks"
+      class="mt-6 text-2xl md:text-3xl font-black text-[#8B0000] opacity-0 transition-opacity duration-700 delay-300 tracking-widest uppercase">
+      NAMA DIVISI
+    </h2>
+  </div>
+  <!-- ============================================================== -->
+
   <main class="flex-1">
 
     <nav class="fixed top-0 left-0 w-full bg-white px-6 md:px-12 py-3 flex justify-between items-center shadow-md z-50">
@@ -178,23 +195,36 @@
           </button>
           <div
             class="absolute left-0 mt-0 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 p-2 text-gray-600">
-            <button onclick="bukaHalaman('kepengurusan', this); bukaDivisi('bpi')"
+
+            <!-- BPI (Silakan ganti nama file-nya jika ada) -->
+            <button onclick="bukaDenganIntro('bpi', 'BPI.png', 'Badan Pengurus Inti')"
               class="block w-full text-left px-4 py-2 hover:bg-red-50 hover:text-maroon rounded-xl transition text-sm">BPI</button>
-            <button onclick="bukaHalaman('kepengurusan', this); bukaDivisi('komisi1')"
+
+            <!-- Komisi 1 -->
+            <button onclick="bukaDenganIntro('komisi1', 'KOMISI 1.png', 'Komisi 1')"
               class="block w-full text-left px-4 py-2 hover:bg-red-50 hover:text-maroon rounded-xl transition text-sm">Komisi
               1</button>
-            <button onclick="bukaHalaman('kepengurusan', this); bukaDivisi('komisi2')"
+
+            <!-- Komisi 2 -->
+            <button onclick="bukaDenganIntro('komisi2', 'KOMISI 2.png', 'Komisi 2')"
               class="block w-full text-left px-4 py-2 hover:bg-red-50 hover:text-maroon rounded-xl transition text-sm">Komisi
               2</button>
-            <button onclick="bukaHalaman('kepengurusan', this); bukaDivisi('komisi3')"
+
+            <!-- Komisi 3 -->
+            <button onclick="bukaDenganIntro('komisi3', 'KOMISI 3.png', 'Komisi 3')"
               class="block w-full text-left px-4 py-2 hover:bg-red-50 hover:text-maroon rounded-xl transition text-sm">Komisi
               3</button>
-            <button onclick="bukaHalaman('kepengurusan', this); bukaDivisi('medinfo')"
+
+            <!-- Biro Medinfo -->
+            <button onclick="bukaDenganIntro('medinfo', 'MEDINFO.png', 'Biro Medinfo')"
               class="block w-full text-left px-4 py-2 hover:bg-red-50 hover:text-maroon rounded-xl transition text-sm">Biro
               Medinfo</button>
-            <button onclick="bukaHalaman('kepengurusan', this); bukaDivisi('legislasi')"
+
+            <!-- Biro Legislasi -->
+            <button onclick="bukaDenganIntro('legislasi', 'LEGISLATIF.png', 'Biro Legislasi')"
               class="block w-full text-left px-4 py-2 hover:bg-red-50 hover:text-maroon rounded-xl transition text-sm">Biro
               Legislasi</button>
+
           </div>
         </div>
         <button onclick="bukaHalaman('dokumen', this)" class="nav-link hover:text-maroon transition">Dokumen</button>
@@ -225,18 +255,31 @@
         <div class="py-3 border-b border-gray-100">
           <p class="font-semibold text-gray-700 mb-2">Kepengurusan :</p>
           <div class="pl-4 flex flex-col gap-2">
-            <button onclick="bukaHalaman('kepengurusan', this); bukaDivisi('bpi'); toggleMenuHP()"
-              class="text-left text-sm text-gray-500">BPI</button>
-            <button onclick="bukaHalaman('kepengurusan', this); bukaDivisi('komisi1'); toggleMenuHP()"
-              class="text-left text-sm text-gray-500">Komisi 1</button>
-            <button onclick="bukaHalaman('kepengurusan', this); bukaDivisi('komisi2'); toggleMenuHP()"
-              class="text-left text-sm text-gray-500">Komisi 2</button>
-            <button onclick="bukaHalaman('kepengurusan', this); bukaDivisi('komisi3'); toggleMenuHP()"
-              class="text-left text-sm text-gray-500">Komisi 3</button>
-            <button onclick="bukaHalaman('kepengurusan', this); bukaDivisi('medinfo'); toggleMenuHP()"
-              class="text-left text-sm text-gray-500">Biro Medinfo</button>
-            <button onclick="bukaHalaman('kepengurusan', this); bukaDivisi('legislasi'); toggleMenuHP()"
-              class="text-left text-sm text-gray-500">Biro Legislasi</button>
+
+            <!-- Tombol BPI -->
+            <button onclick="toggleMenuHP(); bukaDenganIntro('bpi', 'URL_LOGO_BPI.png', 'Badan Pengurus Inti')"
+              class="text-left text-sm text-gray-500 hover:text-[#8B0000] transition-colors">BPI</button>
+
+            <!-- Tombol Komisi 1 -->
+            <button onclick="toggleMenuHP(); bukaDenganIntro('komisi1', 'URL_LOGO_KOMISI1.png', 'Komisi 1')"
+              class="text-left text-sm text-gray-500 hover:text-[#8B0000] transition-colors">Komisi 1</button>
+
+            <!-- Tombol Komisi 2 -->
+            <button onclick="toggleMenuHP(); bukaDenganIntro('komisi2', 'URL_LOGO_KOMISI2.png', 'Komisi 2')"
+              class="text-left text-sm text-gray-500 hover:text-[#8B0000] transition-colors">Komisi 2</button>
+
+            <!-- Tombol Komisi 3 -->
+            <button onclick="toggleMenuHP(); bukaDenganIntro('komisi3', 'URL_LOGO_KOMISI3.png', 'Komisi 3')"
+              class="text-left text-sm text-gray-500 hover:text-[#8B0000] transition-colors">Komisi 3</button>
+
+            <!-- Tombol Biro Medinfo -->
+            <button onclick="toggleMenuHP(); bukaDenganIntro('medinfo', 'URL_LOGO_MEDINFO.png', 'Biro Medinfo')"
+              class="text-left text-sm text-gray-500 hover:text-[#8B0000] transition-colors">Biro Medinfo</button>
+
+            <!-- Tombol Biro Legislasi -->
+            <button onclick="toggleMenuHP(); bukaDenganIntro('legislasi', 'URL_LOGO_LEGISLASI.png', 'Biro Legislasi')"
+              class="text-left text-sm text-gray-500 hover:text-[#8B0000] transition-colors">Biro Legislasi</button>
+
           </div>
         </div>
 
@@ -642,90 +685,104 @@
           </div>
 
           <div class="w-full lg:w-2/3 min-w-0 overflow-hidden">
-  <!-- Container Utama Swiper -->
-  <div class="swiper slider-profil !pb-8 !pt-2 !px-2">
-    
-    <!-- Wrapper Swiper -->
-    <div class="swiper-wrapper">
+            <!-- Container Utama Swiper -->
+            <div class="swiper slider-profil !pb-8 !pt-2 !px-2">
 
-      <!-- Slide: Ketua Umum -->
-      <div class="swiper-slide w-[240px]">
-        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
-          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-            <img src="https://drive.google.com/thumbnail?id=1JDE62dt_BbTu8jXfi8pKGTJJLlN26klH&sz=w1000" alt="Muhammad Zidan" class="w-full h-full object-cover object-top">
-          </div>
-          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Muhammad Zidan Nurroyyan</h4>
-          <p class="text-xs font-semibold text-[#B00000]">Ketua Umum</p>
-        </div>
-      </div>
-       
-      <!-- Slide: SekJen -->
-      <div class="swiper-slide w-[240px]">
-        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
-          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-            <img src="https://drive.google.com/thumbnail?id=1TcYkegXi1riP6_PMCnvN_Ux422keML2n&sz=w1000" alt="Esther Elizabeth" class="w-full h-full object-cover object-top">
-          </div>
-          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Esther Elizabeth</h4>
-          <p class="text-xs font-semibold text-[#B00000]">Sekretaris Jendral</p>
-        </div>
-      </div>
+              <!-- Wrapper Swiper -->
+              <div class="swiper-wrapper">
 
-      <!-- Slide: Komisi 1 -->
-      <div class="swiper-slide w-[240px]">
-        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
-          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-            <img src="https://drive.google.com/thumbnail?id=1DAJAXKN7E8TcqF1yQYxzrs7elF5-eiS4&sz=w1000" alt="Ghitrof Fadawkas" class="w-full h-full object-cover object-top">
-          </div>
-          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Ghitrof Fadawkas Z.</h4>
-          <p class="text-xs font-semibold text-[#B00000]">Ketua Komisi 1</p>
-        </div>
-      </div>
+                <!-- Slide: Ketua Umum -->
+                <div class="swiper-slide w-[240px]">
+                  <div
+                    class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+                    <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+                      <img src="https://drive.google.com/thumbnail?id=1JDE62dt_BbTu8jXfi8pKGTJJLlN26klH&sz=w1000"
+                        alt="Muhammad Zidan" class="w-full h-full object-cover object-top">
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Muhammad Zidan Nurroyyan</h4>
+                    <p class="text-xs font-semibold text-[#B00000]">Ketua Umum</p>
+                  </div>
+                </div>
 
-      <!-- Slide: Komisi 2 -->
-      <div class="swiper-slide w-[240px]">
-        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
-          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-            <img src="https://drive.google.com/thumbnail?id=1_BdAzILDYjyE3kEywCX8Qd3pMZLyo-jr&sz=w1000" alt="Aidden Raditya" class="w-full h-full object-cover object-top">
-          </div>
-          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Aidden Raditya</h4>
-          <p class="text-xs font-semibold text-[#B00000]">Ketua Komisi 2</p>
-        </div>
-      </div>
+                <!-- Slide: SekJen -->
+                <div class="swiper-slide w-[240px]">
+                  <div
+                    class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+                    <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+                      <img src="https://drive.google.com/thumbnail?id=1TcYkegXi1riP6_PMCnvN_Ux422keML2n&sz=w1000"
+                        alt="Esther Elizabeth" class="w-full h-full object-cover object-top">
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Esther Elizabeth</h4>
+                    <p class="text-xs font-semibold text-[#B00000]">Sekretaris Jendral</p>
+                  </div>
+                </div>
 
-      <!-- Slide: Komisi 3 -->
-      <div class="swiper-slide w-[240px]">
-        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
-          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-            <img src="https://drive.google.com/thumbnail?id=1V6z1EBgnZ3eCTN829mCP7ACsngNl22Hq&sz=w1000" alt="Adelia Indri" class="w-full h-full object-cover object-top">
-          </div>
-          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Adelia Indri</h4>
-          <p class="text-xs font-semibold text-[#B00000]">Ketua Komisi 3</p>
-        </div>
-      </div>
+                <!-- Slide: Komisi 1 -->
+                <div class="swiper-slide w-[240px]">
+                  <div
+                    class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+                    <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+                      <img src="https://drive.google.com/thumbnail?id=1DAJAXKN7E8TcqF1yQYxzrs7elF5-eiS4&sz=w1000"
+                        alt="Ghitrof Fadawkas" class="w-full h-full object-cover object-top">
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Ghitrof Fadawkas Z.</h4>
+                    <p class="text-xs font-semibold text-[#B00000]">Ketua Komisi 1</p>
+                  </div>
+                </div>
 
-      <!-- Slide: Legislasi -->
-      <div class="swiper-slide w-[240px]">
-        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
-          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-            <img src="https://drive.google.com/thumbnail?id=1h98CBTvfXkBcfOd-WuG3OCUFiIzrd4d-&sz=w1000" alt="Muhammad Dzaky" class="w-full h-full object-cover object-top">
-          </div>
-          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Muhammad Dzaky Pewira</h4>
-          <p class="text-xs font-semibold text-[#B00000]">Ketua Biro Legislasi</p>
-        </div>
-      </div>
+                <!-- Slide: Komisi 2 -->
+                <div class="swiper-slide w-[240px]">
+                  <div
+                    class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+                    <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+                      <img src="https://drive.google.com/thumbnail?id=1_BdAzILDYjyE3kEywCX8Qd3pMZLyo-jr&sz=w1000"
+                        alt="Aidden Raditya" class="w-full h-full object-cover object-top">
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Aidden Raditya</h4>
+                    <p class="text-xs font-semibold text-[#B00000]">Ketua Komisi 2</p>
+                  </div>
+                </div>
 
-      <!-- Slide: Medinfo -->
-      <div class="swiper-slide w-[240px]">
-        <div class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
-          <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
-            <img src="https://drive.google.com/thumbnail?id=19yYpqmN-3MQgfVFE2hQgldu5dOXhrTYi&sz=w1000" alt="Annizar Hamdani" class="w-full h-full object-cover object-top">
-          </div>
-          <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Annizar Hamdani</h4>
-          <p class="text-xs font-semibold text-[#B00000]">Ketua Biro Medinfo</p>
-        </div>
-      </div>
-    </div>
-  </div>
+                <!-- Slide: Komisi 3 -->
+                <div class="swiper-slide w-[240px]">
+                  <div
+                    class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+                    <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+                      <img src="https://drive.google.com/thumbnail?id=1V6z1EBgnZ3eCTN829mCP7ACsngNl22Hq&sz=w1000"
+                        alt="Adelia Indri" class="w-full h-full object-cover object-top">
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Adelia Indri</h4>
+                    <p class="text-xs font-semibold text-[#B00000]">Ketua Komisi 3</p>
+                  </div>
+                </div>
+
+                <!-- Slide: Legislasi -->
+                <div class="swiper-slide w-[240px]">
+                  <div
+                    class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+                    <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+                      <img src="https://drive.google.com/thumbnail?id=1h98CBTvfXkBcfOd-WuG3OCUFiIzrd4d-&sz=w1000"
+                        alt="Muhammad Dzaky" class="w-full h-full object-cover object-top">
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Muhammad Dzaky Pewira</h4>
+                    <p class="text-xs font-semibold text-[#B00000]">Ketua Biro Legislasi</p>
+                  </div>
+                </div>
+
+                <!-- Slide: Medinfo -->
+                <div class="swiper-slide w-[240px]">
+                  <div
+                    class="bg-white rounded-[30px] p-4 shadow-sm border border-gray-100 text-center hover:shadow-xl transition-all h-full">
+                    <div class="w-full h-64 bg-gray-100 rounded-[20px] mb-4 overflow-hidden">
+                      <img src="https://drive.google.com/thumbnail?id=19yYpqmN-3MQgfVFE2hQgldu5dOXhrTYi&sz=w1000"
+                        alt="Annizar Hamdani" class="w-full h-full object-cover object-top">
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-base leading-tight mb-1">Annizar Hamdani</h4>
+                    <p class="text-xs font-semibold text-[#B00000]">Ketua Biro Medinfo</p>
+                  </div>
+                </div>
+              </div>
+            </div>
       </section>
     </div>
 
@@ -2495,11 +2552,55 @@
         track.style.transform = `translateX(-${posisiSlideSaatIni * 100}%)`;
       }
       const swiperProfil = new Swiper('.slider-profil', {
-    slidesPerView: 'auto', // Membiarkan lebar slide diatur oleh CSS (240px)
-    spaceBetween: 24,      // Jarak antar kartu (setara gap-6 di Tailwind)
-    grabCursor: true,      // Kursor berubah jadi tangan saat di-hover
-    freeMode: true,        // Scroll bebas dan halus (tidak patah-patah ke tengah)
-  });
+        slidesPerView: 'auto', // Membiarkan lebar slide diatur oleh CSS (240px)
+        spaceBetween: 24,      // Jarak antar kartu (setara gap-6 di Tailwind)
+        grabCursor: true,      // Kursor berubah jadi tangan saat di-hover
+        freeMode: true,        // Scroll bebas dan halus (tidak patah-patah ke tengah)
+      });
+      // ================= SCRIPT UNTUK INTRO ANIMASI DIVISI =================
+      function bukaDenganIntro(idTarget, urlLogo, namaDivisi) {
+        const introAnimasi = document.getElementById('intro-animasi');
+        const introLogo = document.getElementById('intro-logo');
+        const introTeks = document.getElementById('intro-teks');
+
+        // 1. Siapkan Logo dan Teks sesuai divisi yang diklik
+        introLogo.src = urlLogo;
+        introTeks.innerText = namaDivisi;
+
+        // 2. Munculkan Layar Intro (Fade In)
+        introAnimasi.classList.remove('opacity-0', 'pointer-events-none');
+        introAnimasi.classList.add('opacity-100');
+
+        // Animasi logo membesar (Zoom In)
+        introLogo.classList.remove('scale-50');
+        introLogo.classList.add('scale-100');
+
+        // Animasi teks muncul
+        introTeks.classList.remove('opacity-0');
+        introTeks.classList.add('opacity-100');
+
+        // 3. Jeda waktu sebelum pindah halaman (1500 ms = 1.5 detik)
+        setTimeout(() => {
+
+          // --> Panggil fungsi buka halaman & divisi yang sudah Anda miliki sebelumnya
+          bukaHalaman('kepengurusan');
+          bukaDivisi(idTarget);
+
+          // Gulir ke paling atas secara instan di belakang layar
+          window.scrollTo(0, 0);
+
+          // 4. Hilangkan Layar Intro (Fade Out)
+          introAnimasi.classList.remove('opacity-100');
+          introAnimasi.classList.add('opacity-0', 'pointer-events-none');
+
+          // Kembalikan ukuran logo untuk animasi berikutnya
+          introLogo.classList.remove('scale-100');
+          introLogo.classList.add('scale-50');
+          introTeks.classList.remove('opacity-100');
+          introTeks.classList.add('opacity-0');
+
+        }, 1500); // Anda bisa mengubah angka ini jika animasinya terasa terlalu lama/cepat
+      }
     </script>
 </body>
 
