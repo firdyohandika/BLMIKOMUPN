@@ -254,17 +254,27 @@
           <p class="font-semibold text-gray-700 mb-2">Kepengurusan :</p>
           <div class="pl-4 flex flex-col gap-2">
 
-            <button onclick="toggleMenuHP(); bukaDenganIntro('bpi', 'URL_LOGO_BPI.png', 'Badan Pengurus Inti')"
+            <button onclick="toggleMenuHP(); bukaDenganIntro('bpi', 'BPI.png', 'Badan Pengurus Inti')"
               class="text-left text-sm text-gray-500 hover:text-[#8B0000] transition-colors">BPI</button>
-            <button onclick="toggleMenuHP(); bukaDenganIntro('komisi1', 'URL_LOGO_KOMISI1.png', 'Komisi 1')"
+
+            <!-- Tombol Komisi 1 -->
+            <button onclick="toggleMenuHP(); bukaDenganIntro('komisi1', 'KOMISI 1.png', 'Komisi 1')"
               class="text-left text-sm text-gray-500 hover:text-[#8B0000] transition-colors">Komisi 1</button>
-            <button onclick="toggleMenuHP(); bukaDenganIntro('komisi2', 'URL_LOGO_KOMISI2.png', 'Komisi 2')"
+
+            <!-- Tombol Komisi 2 -->
+            <button onclick="toggleMenuHP(); bukaDenganIntro('komisi2', 'KOMISI 2.png', 'Komisi 2')"
               class="text-left text-sm text-gray-500 hover:text-[#8B0000] transition-colors">Komisi 2</button>
-            <button onclick="toggleMenuHP(); bukaDenganIntro('komisi3', 'URL_LOGO_KOMISI3.png', 'Komisi 3')"
+
+            <!-- Tombol Komisi 3 -->
+            <button onclick="toggleMenuHP(); bukaDenganIntro('komisi3', 'KOMISI 3.png', 'Komisi 3')"
               class="text-left text-sm text-gray-500 hover:text-[#8B0000] transition-colors">Komisi 3</button>
-            <button onclick="toggleMenuHP(); bukaDenganIntro('medinfo', 'URL_LOGO_MEDINFO.png', 'Biro Medinfo')"
+
+            <!-- Tombol Biro Medinfo -->
+            <button onclick="toggleMenuHP(); bukaDenganIntro('medinfo', 'MEDINFO.png', 'Biro Medinfo')"
               class="text-left text-sm text-gray-500 hover:text-[#8B0000] transition-colors">Biro Medinfo</button>
-            <button onclick="toggleMenuHP(); bukaDenganIntro('legislasi', 'URL_LOGO_LEGISLASI.png', 'Biro Legislasi')"
+
+            <!-- Tombol Biro Legislasi -->
+            <button onclick="toggleMenuHP(); bukaDenganIntro('legislasi', 'LEGISLATIF.png', 'Biro Legislasi')"
               class="text-left text-sm text-gray-500 hover:text-[#8B0000] transition-colors">Biro Legislasi</button>
           </div>
         </div>
@@ -276,7 +286,7 @@
     <!-- Halaman Beranda -->
     <div id="beranda" class="halaman aktif bg-gray-50/50">
       <section class="relative w-full h-[600px] flex items-center px-6 md:px-24 bg-dark bg-cover overflow-hidden"
-        style="background-image: url('https://drive.google.com/thumbnail?id=1XchzYWbvRb3vGVhjWx2YHh7KI_HOAAPd&sz=w1920'); background-position: center -10%;">
+        style="background-image: url('https://drive.google.com/thumbnail?id=1XchzYWbvRb3vGVhjWx2YHh7KI_HOAAPd&sz=w1920'); background-position: center -20%;">
         <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent"></div>
 
         <div class="relative z-10 text-white max-w-3xl mt-10">
@@ -2526,30 +2536,30 @@
         track.style.transform = `translateX(-${posisiSlideSaatIni * 100}%)`;
       }
       const swiperProfil = new Swiper('.slider-profil', {
-        slidesPerView: 'auto', 
-        spaceBetween: 24,      
-        grabCursor: true,      
-        freeMode: true,       
+        slidesPerView: 'auto',
+        spaceBetween: 24,
+        grabCursor: true,
+        freeMode: true,
       });
-      
+
       function bukaDenganIntro(idTarget, urlLogo, namaDivisi) {
         const introAnimasi = document.getElementById('intro-animasi');
         const introLogo = document.getElementById('intro-logo');
         const introTeks = document.getElementById('intro-teks');
 
-        
+
         introLogo.src = urlLogo;
         introTeks.innerText = namaDivisi;
 
-       
+
         introAnimasi.classList.remove('opacity-0', 'pointer-events-none');
         introAnimasi.classList.add('opacity-100');
 
-        
+
         introLogo.classList.remove('scale-50');
         introLogo.classList.add('scale-100');
 
-       
+
         introTeks.classList.remove('opacity-0');
         introTeks.classList.add('opacity-100');
 
@@ -2568,7 +2578,7 @@
           introTeks.classList.remove('opacity-100');
           introTeks.classList.add('opacity-0');
 
-        }, 1500); 
+        }, 1500);
       }
     </script>
 </body>
