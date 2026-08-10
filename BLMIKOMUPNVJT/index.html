@@ -272,9 +272,10 @@
 
     <!-- Beranda -->
     <div id="beranda" class="halaman aktif bg-gray-50/50">
-      <section class="relative w-full h-[600px] flex items-center px-6 md:px-24 bg-dark bg-cover overflow-hidden"
-        style="background-image: url('https://drive.google.com/thumbnail?id=1XchzYWbvRb3vGVhjWx2YHh7KI_HOAAPd&sz=w1920'); background-position: center -20%;">
-        <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent"></div>
+  <section class="relative w-full h-[600px] flex items-center px-6 md:px-24 bg-dark bg-cover overflow-hidden bg-top md:bg-[center_-20%]"
+    style="background-image: url('https://drive.google.com/thumbnail?id=1XchzYWbvRb3vGVhjWx2YHh7KI_HOAAPd&sz=w1920');">
+    
+    <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent"></div>
 
         <div class="relative z-10 text-white max-w-3xl mt-10">
           <div class="animasi-muncul" style="animation-delay: 0.2s;">
@@ -798,9 +799,6 @@
             </div>
           </div>
           <div class="order-1 md:order-2 relative group">
-            <div
-              class="absolute -inset-2 bg-gradient-to-r from-maroon to-red-600 rounded-[36px] blur opacity-25 group-hover:opacity-40 transition duration-500">
-            </div>
             <div class="relative bg-white rounded-[32px] p-2 shadow-xl overflow-hidden">
               <img src="https://drive.google.com/thumbnail?id=131ufyq0xyZGRijBWVLyRUlDDGwtsKvBN&sz=w1000"
                 alt="Parlemen Vaktavya"
@@ -2030,7 +2028,7 @@
               alt="Logo Parlemen Vaktavya" class="w-12 h-12 object-contain" id="logoImage">
             <h3 class="font-bold text-lg leading-tight">PARLEMEN<br>VAKTAVYA</h3>
           </div>
-          <p class="text-sm opacity-80 italic">Vokal Komunikatif, Transparansi yang Aktif</p>
+          <p class="text-sm opacity-80 italic">Vokal Komunikasi, Transparansi yang Aktif</p>
         </div>
 
         <div class="flex flex-col items-start">
@@ -2567,6 +2565,35 @@
 
         }, 1500);
       }
+      // Mendengarkan saat tombol 'Back' atau 'Forward' di browser ditekan
+window.addEventListener('hashchange', () => {
+  const hash = window.location.hash.replace('#', ''); // Mengambil teks setelah '#'
+  if (hash) {
+    // 1. Pindah ke halaman yang sesuai
+    bukaHalaman(hash); 
+    
+    // 2. Paksa garis merah pindah ke menu yang benar
+    updateGarisMerahNavbar(hash);
+  }
+});
+
+// Fungsi khusus untuk mereset dan memindahkan garis merah
+function updateGarisMerahNavbar(idHalaman) {
+  // Ambil semua tombol menu di navbar
+  const semuaMenu = document.querySelectorAll('.nav-link');
+  
+  // Hapus status aktif (garis merah) dari semua menu
+  semuaMenu.forEach(menu => {
+    // Sesuaikan kelas di bawah ini dengan kelas garis merah yang Anda gunakan
+    menu.classList.remove('text-maroon', 'border-b-2', 'border-maroon'); 
+  });
+  
+  // Cari menu yang memiliki perintah onclick ke halaman yang sedang terbuka, lalu aktifkan
+  const menuAktif = document.querySelector(`.nav-link[onclick*="${idHalaman}"]`);
+  if (menuAktif) {
+    menuAktif.classList.add('text-maroon', 'border-b-2', 'border-maroon');
+  }
+}
     </script>
 </body>
 
