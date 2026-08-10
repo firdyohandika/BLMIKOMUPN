@@ -272,7 +272,9 @@
 
     <!-- Beranda -->
     <div id="beranda" class="halaman aktif bg-gray-50/50">
-  <section class="relative w-full h-[600px] flex items-center px-6 md:px-24 bg-dark bg-cover overflow-hidden bg-top md:bg-[center_-20%]"
+  
+  <!-- Ubah h-[600px] menjadi h-[450px] md:h-[600px] -->
+  <section class="relative w-full h-[450px] md:h-[600px] flex items-center px-6 md:px-24 bg-dark bg-cover overflow-hidden bg-top md:bg-[center_-20%]"
     style="background-image: url('https://drive.google.com/thumbnail?id=1XchzYWbvRb3vGVhjWx2YHh7KI_HOAAPd&sz=w1920');">
     
     <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent"></div>
@@ -2576,24 +2578,6 @@ window.addEventListener('hashchange', () => {
     updateGarisMerahNavbar(hash);
   }
 });
-
-// Fungsi khusus untuk mereset dan memindahkan garis merah
-function updateGarisMerahNavbar(idHalaman) {
-  // Ambil semua tombol menu di navbar
-  const semuaMenu = document.querySelectorAll('.nav-link');
-  
-  // Hapus status aktif (garis merah) dari semua menu
-  semuaMenu.forEach(menu => {
-    // Sesuaikan kelas di bawah ini dengan kelas garis merah yang Anda gunakan
-    menu.classList.remove('text-maroon', 'border-b-2', 'border-maroon'); 
-  });
-  
-  // Cari menu yang memiliki perintah onclick ke halaman yang sedang terbuka, lalu aktifkan
-  const menuAktif = document.querySelector(`.nav-link[onclick*="${idHalaman}"]`);
-  if (menuAktif) {
-    menuAktif.classList.add('text-maroon', 'border-b-2', 'border-maroon');
-  }
-}
     </script>
 </body>
 
