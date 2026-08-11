@@ -2139,6 +2139,12 @@
       </div>
     </footer>
 
+    <!-- ================= TOAST NOTIFIKASI COPY LINK ================= -->
+<div id="toast-copy" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full flex items-center gap-3 shadow-2xl z-50 transition-all duration-300 opacity-0 translate-y-5 pointer-events-none">
+  <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+  <span class="text-sm font-medium tracking-wide">Tautan berhasil disalin!</span>
+</div>
+
     <script>
       function bukaHalaman(idHalaman, elemenTombol = null, dariTombolBack = false) {
         const semuaHalaman = document.querySelectorAll('.halaman');
@@ -2297,32 +2303,40 @@
           });
       }
 
-      // Variabel global penyimpan data Excel
       let dataDokumenGlobal = [];
 
       function muatDokumen() {
-        const waktuSekarang = new Date().getTime();
-        fetch(SCRIPT_URL_API + "?action=dokumen&t=" + waktuSekarang)
-          .then(res => res.json())
-          .then(dataMentah => {
-            try {
-              // Urutkan data sekali saja, lalu simpan ke variabel global
-              dataDokumenGlobal = urutkanDataTerbaru(dataMentah);
+  const waktuSekarang = new Date().getTime();
+  fetch(SCRIPT_URL_API + "?action=dokumen&t=" + waktuSekarang)
+    .then(res => res.json())
+    .then(dataMentah => {
+      try {
+        dataDokumenGlobal = urutkanDataTerbaru(dataMentah);
+        tampilkanDokumen(dataDokumenGlobal);
+        tampilkanBerita(dataDokumenGlobal);
 
-              // Render ke halaman Dokumen & halaman Beranda
-              tampilkanDokumen(dataDokumenGlobal);
-              tampilkanBerita(dataDokumenGlobal);
-            } catch (e) {
-              console.error("Error memproses data:", e);
-            }
-          })
-          .catch(err => {
-            console.error(err);
-            const wadah = document.getElementById("wadah-dokumen");
-            if (wadah) wadah.innerHTML =
-              `<div class="text-center text-red-500 py-8">Gagal memuat data dari server.</div>`;
-          });
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramBerita = urlParams.get('berita');
+        
+        if (paramBerita) {
+          // Cari berita mana yang judulnya sama persis dengan yang ada di URL
+          const indexDicari = dataDokumenGlobal.findIndex(baris => baris[1] === paramBerita);
+          if (indexDicari !== -1) {
+            bukaDetailBerita(indexDicari);
+          }
+        }
+        
+      } catch (e) {
+        console.error("Error memproses data:", e);
       }
+    })
+    .catch(err => {
+      console.error(err);
+      const wadah = document.getElementById("wadah-dokumen");
+      if (wadah) wadah.innerHTML =
+        `<div class="text-center text-red-500 py-8">Gagal memuat data dari server.</div>`;
+    });
+}
 
       function urutkanDataTerbaru(dataArray) {
         if (!dataArray || dataArray.length === 0) return [];
@@ -2386,7 +2400,6 @@
             `<img src="${fotoURL}" alt="${judul}" referrerpolicy="no-referrer" class="w-full md:w-[150px] h-[150px] object-cover rounded-3xl flex-shrink-0 border border-gray-100 shadow-sm">` :
             `<div class="w-full md:w-[150px] h-[150px] bg-gray-50 rounded-3xl flex items-center justify-center flex-shrink-0 border border-gray-100"><span class="text-gray-400 text-xs font-medium">Tanpa Foto</span></div>`;
 
-          // Sistem Penyeleksi Tombol Otomatis
           let aksiTombol = `<a href="${link}" target="_blank" rel="noopener noreferrer" class="block w-full md:w-auto text-center px-8 py-3 bg-white border border-[#8B0000] text-[#8B0000] hover:bg-[#8B0000] hover:text-white rounded-full font-bold transition-all duration-300 shadow-sm hover:shadow-md">Baca Dokumen</a>`;
           if (kategori.toUpperCase().includes("PRESS") || kategori.toUpperCase().includes("BERITA")) {
             aksiTombol = `<button onclick="bukaDetailBerita(${index})" class="block w-full md:w-auto text-center px-8 py-3 bg-[#8B0000] border border-[#8B0000] text-white hover:bg-[#600000] rounded-full font-bold transition-all duration-300 shadow-sm hover:shadow-md">Baca Berita</button>`;
@@ -2422,7 +2435,6 @@
           return;
         }
 
-        // Khusus untuk di Beranda, kita saring HANYA yang berkategori Press Release/Berita
         const khususBerita = dataYangSudahDiurutkan.filter(b =>
           (b[0] || '').toUpperCase().includes("PRESS") || (b[0] || '').toUpperCase().includes("BERITA")
         );
@@ -2436,13 +2448,11 @@
 
         let html = '';
         beritaTerbaru.forEach(baris => {
-          // Cari index aslinya di dataDokumenGlobal agar bisa dibuka dengan fungsi bukaDetailBerita
           const originalIndex = dataDokumenGlobal.indexOf(baris);
-
           const kategori = baris[0] || 'Kategori';
           const judul = baris[1] || 'Tanpa Judul';
           const tanggal = baris[2] || '-';
-          const fotoMentah = baris[4] || ''; // Hanya baca dari Kolom E
+          const fotoMentah = baris[4] || ''; 
 
           let fotoURL = fotoMentah;
           if (fotoMentah.includes("drive.google.com")) {
@@ -2459,7 +2469,6 @@
             `<img src="${fotoURL}" alt="${judul}" referrerpolicy="no-referrer" class="w-full h-44 object-cover rounded-xl transition-transform duration-500 group-hover:scale-105">` :
             `<div class="w-full h-44 bg-gray-100 flex items-center justify-center rounded-xl"><span class="text-gray-400 text-xs">Tidak ada foto</span></div>`;
 
-          // Ubah <a> tag menjadi <div onclick="...">
           html += `
     <div onclick="bukaDetailBerita(${originalIndex})" class="cursor-pointer bg-white p-4 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md hover:border-red-200 transition-all duration-300 flex flex-col h-full group">
         <div class="mb-4 rounded-xl overflow-hidden bg-gray-50">
@@ -2480,105 +2489,128 @@
         wadah.innerHTML = html;
       }
 
-      // Fungsi membuka mode baca khusus berita
-      function bukaDetailBerita(index) {
-        const baris = dataDokumenGlobal[index];
-        if (!baris) return;
+function bukaDetailBerita(index) {
+  const baris = dataDokumenGlobal[index];
+  if (!baris) return;
 
-        const kategori = baris[0] || 'Kategori';
-        const judul = baris[1] || 'Tanpa Judul';
-        const tanggal = baris[2] || '-';
-        const konten = baris[5] || 'Teks press release belum ditambahkan di Excel...';
-        const penulis = baris[6] || 'Tim Redaksi';
+  const kategori = baris[0] || 'Kategori';
+  const judul = baris[1] || 'Tanpa Judul';
+  const tanggal = baris[2] || '-';
+  const konten = baris[5] || 'Teks press release belum ditambahkan di Excel...'; 
+  const penulis = baris[6] || 'Tim Redaksi'; 
 
-        let fotoMentah = baris[4] || '';
-        let fotoURL = 'https://via.placeholder.com/800x400?text=Gambar+Tidak+Tersedia';
-        if (fotoMentah.includes("drive.google.com")) {
-          let fileId = "";
-          if (fotoMentah.includes("/d/")) {
-            fileId = fotoMentah.split("/d/")[1].split("/")[0].split("?")[0];
-          } else if (fotoMentah.includes("id=")) {
-            fileId = fotoMentah.split("id=")[1].split("&")[0];
-          }
-          if (fileId) fotoURL = `https://lh3.googleusercontent.com/d/${fileId}`;
-        } else if (fotoMentah) {
-          fotoURL = fotoMentah;
-        }
-
-        document.getElementById('baca-penulis').innerText = penulis;
-        document.getElementById('baca-kategori').innerText = kategori;
-        document.getElementById('baca-tanggal').innerText = tanggal;
-        document.getElementById('baca-tanggal-penulis').innerText = tanggal;
-        document.getElementById('baca-judul').innerText = judul;
-        document.getElementById('baca-gambar').src = fotoURL;
-
-        let kontenHTML = konten.replace(/\n/g, '<br><br>');
-kontenHTML = kontenHTML.replace(/^(.*?)\s-\s/gm, '<strong>$1</strong> - ');
-        document.getElementById('baca-konten').innerHTML = kontenHTML;
-
-        // Sidebar Artikel Terkait
-        const sidebar = document.getElementById('sidebar-berita');
-        sidebar.innerHTML = '';
-
-        const artikelLain = dataDokumenGlobal.filter((item, i) => i !== index && (item[0] || '').toUpperCase().includes("PRESS")).slice(0, 3);
-
-        if (artikelLain.length === 0) {
-          sidebar.innerHTML = '<p class="text-sm text-white/70">Belum ada rilis terkait lainnya.</p>';
-        } else {
-          artikelLain.forEach(item => {
-            const originalIndex = dataDokumenGlobal.indexOf(item);
-            let thumb = item[4] || '';
-            if (thumb.includes("id=")) thumb = `https://lh3.googleusercontent.com/d/${thumb.split("id=")[1].split("&")[0]}`;
-            else if (thumb.includes("/d/")) thumb = `https://lh3.googleusercontent.com/d/${thumb.split("/d/")[1].split("/")[0].split("?")[0]}`;
-
-            sidebar.innerHTML += `
-          <div onclick="bukaDetailBerita(${originalIndex})" class="group cursor-pointer flex gap-4 items-center bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-colors">
-              <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-white/10">
-                  <img src="${thumb || fotoURL}" class="w-full h-full object-cover group-hover:scale-110 transition-transform">
-              </div>
-              <div>
-                  <span class="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded text-white mb-1 inline-block">${item[2]}</span>
-                  <h4 class="text-sm font-semibold text-white line-clamp-2 group-hover:text-red-200">${item[1]}</h4>
-              </div>
-          </div>
-          `;
-          });
-        }
-
-        // Pindah halaman ke detail-berita
-        if (typeof bukaHalaman === 'function') {
-          bukaHalaman('detail-berita');
-        } else {
-          console.error("Fungsi bukaHalaman tidak ditemukan.");
-        }
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+  let fotoMentah = baris[4] || ''; 
+  let fotoURL = 'https://via.placeholder.com/800x400?text=Gambar+Tidak+Tersedia'; 
+  if (fotoMentah.includes("drive.google.com")) {
+      let fileId = "";
+      if (fotoMentah.includes("/d/")) {
+          fileId = fotoMentah.split("/d/")[1].split("/")[0].split("?")[0];
+      } else if (fotoMentah.includes("id=")) {
+          fileId = fotoMentah.split("id=")[1].split("&")[0];
       }
+      if (fileId) fotoURL = `https://lh3.googleusercontent.com/d/${fileId}`;
+  } else if (fotoMentah) {
+      fotoURL = fotoMentah;
+  }
 
-      function shareBerita(platform) {
-        const judul = document.getElementById('baca-judul').innerText;
-        const linkURL = window.location.href; // Mengambil URL halaman saat ini
+  if (document.getElementById('baca-penulis')) document.getElementById('baca-penulis').innerText = penulis;
+  if (document.getElementById('baca-kategori')) document.getElementById('baca-kategori').innerText = kategori;
+  if (document.getElementById('baca-tanggal')) document.getElementById('baca-tanggal').innerText = tanggal;
+  if (document.getElementById('baca-tanggal-penulis')) document.getElementById('baca-tanggal-penulis').innerText = tanggal;
+  if (document.getElementById('baca-judul')) document.getElementById('baca-judul').innerText = judul;
+  if (document.getElementById('baca-gambar')) document.getElementById('baca-gambar').src = fotoURL;
 
-        if (platform === 'wa') {
-          const pesan = `Baca Press Release Parlemen Vaktavya:\n*${judul}*\n\n${linkURL}`;
-          window.open(`https://wa.me/?text=${encodeURIComponent(pesan)}`, '_blank');
-        }
-        else if (platform === 'fb') {
-          window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(linkURL)}`, '_blank');
-        }
-        else if (platform === 'twitter') {
-          const pesan = `Baca: ${judul}`;
-          window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(pesan)}&url=${encodeURIComponent(linkURL)}`, '_blank');
-        }
-        else if (platform === 'copy') {
-          // Fitur menyalin link ke clipboard otomatis
-          navigator.clipboard.writeText(linkURL).then(() => {
-            alert("Tautan berhasil disalin ke clipboard!");
-          }).catch(err => {
-            console.error("Gagal menyalin link: ", err);
+  let kontenHTML = konten.replace(/\n/g, '<br><br>');
+  kontenHTML = kontenHTML.replace(/^(.*?)\s-\s/gm, '<strong>$1</strong> - ');
+  if (document.getElementById('baca-konten')) document.getElementById('baca-konten').innerHTML = kontenHTML;
+  const sidebar = document.getElementById('sidebar-berita');
+  if (sidebar) {
+      sidebar.innerHTML = '';
+      const artikelLain = dataDokumenGlobal.filter((item, i) => i !== index && (item[0] || '').toUpperCase().includes("PRESS")).slice(0, 3);
+      
+      if(artikelLain.length === 0) {
+           sidebar.innerHTML = '<p class="text-sm text-white/70">Belum ada rilis terkait lainnya.</p>';
+      } else {
+           artikelLain.forEach(item => {
+              const originalIndex = dataDokumenGlobal.indexOf(item);
+              let thumb = item[4] || '';
+              if (thumb.includes("id=")) thumb = `https://lh3.googleusercontent.com/d/${thumb.split("id=")[1].split("&")[0]}`;
+              else if (thumb.includes("/d/")) thumb = `https://lh3.googleusercontent.com/d/${thumb.split("/d/")[1].split("/")[0].split("?")[0]}`;
+              
+              sidebar.innerHTML += `
+              <div onclick="bukaDetailBerita(${originalIndex})" class="group cursor-pointer flex gap-4 items-center bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-colors">
+                  <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-white/10">
+                      <img src="${thumb || fotoURL}" class="w-full h-full object-cover group-hover:scale-110 transition-transform">
+                  </div>
+                  <div>
+                      <span class="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded text-white mb-1 inline-block">${item[2]}</span>
+                      <h4 class="text-sm font-semibold text-white line-clamp-2 group-hover:text-red-200">${item[1]}</h4>
+                  </div>
+              </div>
+              `;
           });
-        }
       }
+  }
+
+  try {
+      const paramJudul = encodeURIComponent(judul);
+      const basePath = window.location.href.split('?')[0]; 
+      const urlBaru = basePath + "?berita=" + paramJudul;
+      window.history.pushState({path: urlBaru}, '', urlBaru);
+  } catch (e) {
+      console.error("Gagal mengubah URL:", e);
+  }
+  if (typeof bukaHalaman === 'function') {
+      bukaHalaman('detail-berita');
+  } else {
+      console.error("Fungsi bukaHalaman tidak ditemukan.");
+  }
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ==========================================================
+// 2. FUNGSI SHARE BERITA & TOAST NOTIFIKASI
+// ==========================================================
+function shareBerita(platform) {
+  const judul = document.getElementById('baca-judul').innerText;
+  const linkURL = window.location.href; // Mengambil URL halaman saat ini
+
+  if (platform === 'wa') {
+    const pesan = `Baca Press Release Parlemen Vaktavya:\n*${judul}*\n\n${linkURL}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(pesan)}`, '_blank');
+  } 
+  else if (platform === 'fb') {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(linkURL)}`, '_blank');
+  } 
+  else if (platform === 'twitter') {
+    const pesan = `Baca: ${judul}`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(pesan)}&url=${encodeURIComponent(linkURL)}`, '_blank');
+  } 
+  else if (platform === 'copy') {
+    navigator.clipboard.writeText(linkURL).then(() => {
+      // Panggil animasi notifikasi keren
+      tampilkanToast();
+    }).catch(err => {
+      console.error("Gagal menyalin link: ", err);
+    });
+  }
+}
+
+function tampilkanToast() {
+  const toast = document.getElementById('toast-copy');
+  if (toast) {
+    // Munculkan notifikasi (Hapus efek transparan & geser ke atas)
+    toast.classList.remove('opacity-0', 'translate-y-5');
+    toast.classList.add('opacity-100', 'translate-y-0');
+
+    // Sembunyikan otomatis setelah 3 detik
+    setTimeout(() => {
+      toast.classList.remove('opacity-100', 'translate-y-0');
+      toast.classList.add('opacity-0', 'translate-y-5');
+    }, 3000);
+  }
+}
 
       window.addEventListener("DOMContentLoaded", function () {
         if (typeof bukaHalaman === 'function') {
