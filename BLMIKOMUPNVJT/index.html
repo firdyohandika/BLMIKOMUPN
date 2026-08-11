@@ -1869,26 +1869,19 @@
       </section>
     </div>
 
-    <!-- HALAMAN DOKUMEN -->
+    <!-- DOKUMEN -->
     <div id="dokumen" class="halaman bg-gray-50">
-
       <section class="px-6 pt-10">
         <div class="max-w-[1400px] mx-auto">
           <div class="relative overflow-hidden rounded-[32px] bg-maroon shadow-2xl">
             <img src="https://drive.google.com/thumbnail?id=1xpvGwKgsOgLzdWHGxkQ_lMT4IWUUPdVD&sz=w500"
               class="absolute right-0 top-0 h-full opacity-10">
             <div class="px-12 md:px-20 py-20 relative">
-              <h1 class="text-5xl font-extrabold text-white">
-                Dokumen & Press Release
-              </h1>
+              <h1 class="text-5xl font-extrabold text-white">Dokumen & Press Release</h1>
               <div class="flex items-center gap-2 mt-5 text-white">
-                <button onclick="bukaHalaman('beranda')" class="hover:underline">
-                  Home
-                </button>
+                <button onclick="bukaHalaman('beranda')" class="hover:underline">Home</button>
                 <span>/</span>
-                <span class="font-semibold">
-                  Dokumen
-                </span>
+                <span class="font-semibold">Dokumen</span>
               </div>
             </div>
           </div>
@@ -1904,6 +1897,95 @@
         </div>
       </section>
     </div>
+
+    <!-- PRESS RELEASE -->
+    <div id="detail-berita" class="halaman hidden bg-gray-50 py-12">
+      <div class="max-w-7xl mx-auto px-6 md:px-12 flex flex-col lg:flex-row gap-10">
+        <div class="w-full lg:w-2/3 bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-gray-200">
+          <button onclick="bukaHalaman('dokumen')"
+            class="flex items-center text-sm font-semibold text-gray-500 hover:text-[#8B0000] mb-8 transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+              </path>
+            </svg>
+            Kembali ke Dokumen
+          </button>
+
+          <div class="flex items-center gap-3 mb-4">
+            <span id="baca-kategori"
+              class="bg-[#8B0000] text-white text-[10px] md:text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider">KATEGORI</span>
+            <span id="baca-tanggal" class="text-sm text-gray-500 flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              Tanggal
+            </span>
+          </div>
+
+          <h1 id="baca-judul" class="text-3xl md:text-4xl font-black text-gray-900 mb-6 leading-tight">Memuat Judul...
+          </h1>
+
+          <div
+            class="border-y border-gray-100 py-4 mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p class="text-sm md:text-base text-gray-600 mb-1">
+                <span id="baca-penulis" class="font-bold text-gray-900">Tim Redaksi</span> - <span
+                  class="font-bold text-[#8B0000]">Parlemen Vaktavya</span>
+              </p>
+              <p class="text-xs md:text-sm text-gray-400">
+                Dipublikasikan pada <span id="baca-tanggal-penulis"> - </span>
+              </p>
+            </div>
+
+            <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-gray-400 uppercase mr-1">Share:</span>
+              <button onclick="shareBerita('wa')" title="Bagikan ke WhatsApp"
+                class="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center p-1.5 hover:bg-green-100 transition-colors shadow-sm">
+                <img src="ICON WA.png" alt="WhatsApp" class="w-full h-full object-contain">
+              </button>
+              <button onclick="shareBerita('fb')" title="Bagikan ke Facebook"
+                class="bg-blue-100 text-blue-700 p-2 rounded-full hover:bg-blue-200 transition-colors">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+              </button>
+              <button onclick="shareBerita('twitter')" title="Bagikan ke X"
+                class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center p-1.5 hover:bg-gray-200 transition-colors shadow-sm">
+                <img src="ICON X.png" alt="X" class="w-full h-full object-contain">
+              </button>
+              <button onclick="shareBerita('copy')" title="Salin Tautan"
+                class="bg-red-100 text-[#8B0000] p-2 rounded-full hover:bg-red-200 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                  </path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="w-full h-[250px] md:h-[400px] rounded-2xl overflow-hidden mb-8 bg-gray-100">
+            <img id="baca-gambar" src="" alt="Thumbnail Berita" class="w-full h-full object-cover">
+          </div>
+
+          <div id="baca-konten" class="text-gray-700 leading-relaxed space-y-4 text-justify">
+          </div>
+        </div>
+
+        <div class="w-full lg:w-1/3">
+          <div class="bg-[#4a0000] rounded-3xl p-6 md:p-8 text-white shadow-xl lg:sticky lg:top-24">
+            <h3 class="text-xl font-bold mb-6 border-b border-white/20 pb-4">Artikel Terkait</h3>
+            <div id="sidebar-berita" class="flex flex-col gap-5">
+              <p class="text-sm text-white/70">Memuat artikel lain...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
 
     <!-- HALAMAN ASPIRASI -->
     <div id="aspirasi" class="halaman hidden">
@@ -2215,23 +2297,27 @@
           });
       }
 
+      // Variabel global penyimpan data Excel
+      let dataDokumenGlobal = [];
+
       function muatDokumen() {
         const waktuSekarang = new Date().getTime();
         fetch(SCRIPT_URL_API + "?action=dokumen&t=" + waktuSekarang)
           .then(res => res.json())
-          .then(data => {
+          .then(dataMentah => {
             try {
-              tampilkanDokumen(data);
+              // Urutkan data sekali saja, lalu simpan ke variabel global
+              dataDokumenGlobal = urutkanDataTerbaru(dataMentah);
+
+              // Render ke halaman Dokumen & halaman Beranda
+              tampilkanDokumen(dataDokumenGlobal);
+              tampilkanBerita(dataDokumenGlobal);
             } catch (e) {
-              console.error("Error Dokumen:", e);
-            }
-            try {
-              tampilkanBerita(data);
-            } catch (e) {
-              console.error("Error Berita:", e);
+              console.error("Error memproses data:", e);
             }
           })
           .catch(err => {
+            console.error(err);
             const wadah = document.getElementById("wadah-dokumen");
             if (wadah) wadah.innerHTML =
               `<div class="text-center text-red-500 py-8">Gagal memuat data dari server.</div>`;
@@ -2240,41 +2326,18 @@
 
       function urutkanDataTerbaru(dataArray) {
         if (!dataArray || dataArray.length === 0) return [];
-
         let dataSalinan = [...dataArray];
-
         return dataSalinan.sort(function (a, b) {
           function konversiKeAngka(tglStr) {
             if (!tglStr) return 0;
             const bulanIndo = {
-              'januari': 0,
-              'jan': 0,
-              'februari': 1,
-              'feb': 1,
-              'maret': 2,
-              'mar': 2,
-              'april': 3,
-              'apr': 3,
-              'mei': 4,
-              'juni': 5,
-              'jun': 5,
-              'juli': 6,
-              'jul': 6,
-              'agustus': 7,
-              'agu': 7,
-              'ags': 7,
-              'september': 8,
-              'sep': 8,
-              'oktober': 9,
-              'okt': 9,
-              'november': 10,
-              'nov': 10,
-              'desember': 11,
-              'des': 11
+              'januari': 0, 'jan': 0, 'februari': 1, 'feb': 1, 'maret': 2, 'mar': 2,
+              'april': 3, 'apr': 3, 'mei': 4, 'juni': 5, 'jun': 5, 'juli': 6, 'jul': 6,
+              'agustus': 7, 'agu': 7, 'ags': 7, 'september': 8, 'sep': 8,
+              'oktober': 9, 'okt': 9, 'november': 10, 'nov': 10, 'desember': 11, 'des': 11
             };
             let str = tglStr.toString().toLowerCase().trim();
-            let bagian = str.split(/\s+/); // Memecah berdasarkan spasi (mengabaikan spasi ganda)
-
+            let bagian = str.split(/\s+/);
             if (bagian.length >= 3) {
               let hari = parseInt(bagian[0]);
               let bulan = bulanIndo[bagian[1]];
@@ -2286,30 +2349,27 @@
             let hasil = new Date(tglStr).getTime();
             return isNaN(hasil) ? 0 : hasil;
           }
-
           return konversiKeAngka(b[2]) - konversiKeAngka(a[2]);
         });
       }
 
-      function tampilkanDokumen(dataMentah) {
+      function tampilkanDokumen(dataYangSudahDiurutkan) {
         const wadah = document.getElementById("wadah-dokumen");
         if (!wadah) return;
 
-        if (!dataMentah || dataMentah.length === 0) {
+        if (!dataYangSudahDiurutkan || dataYangSudahDiurutkan.length === 0) {
           wadah.innerHTML =
             `<div class="text-center py-12 text-gray-500 font-medium">Belum ada dokumen atau rilis diterbitkan.</div>`;
           return;
         }
 
-        const data = urutkanDataTerbaru(dataMentah);
-
         let html = '';
-        data.forEach(baris => {
+        dataYangSudahDiurutkan.forEach((baris, index) => {
           const kategori = baris[0] || 'Kategori';
           const judul = baris[1] || 'Tanpa Judul';
           const tanggal = baris[2] || '-';
           const link = baris[3] || '#';
-          const fotoMentah = baris[4] || baris[5] || '';
+          const fotoMentah = baris[4] || ''; // Hanya baca dari Kolom E
 
           let fotoURL = fotoMentah;
           if (fotoMentah.includes("drive.google.com")) {
@@ -2326,49 +2386,63 @@
             `<img src="${fotoURL}" alt="${judul}" referrerpolicy="no-referrer" class="w-full md:w-[150px] h-[150px] object-cover rounded-3xl flex-shrink-0 border border-gray-100 shadow-sm">` :
             `<div class="w-full md:w-[150px] h-[150px] bg-gray-50 rounded-3xl flex items-center justify-center flex-shrink-0 border border-gray-100"><span class="text-gray-400 text-xs font-medium">Tanpa Foto</span></div>`;
 
+          // Sistem Penyeleksi Tombol Otomatis
+          let aksiTombol = `<a href="${link}" target="_blank" rel="noopener noreferrer" class="block w-full md:w-auto text-center px-8 py-3 bg-white border border-[#8B0000] text-[#8B0000] hover:bg-[#8B0000] hover:text-white rounded-full font-bold transition-all duration-300 shadow-sm hover:shadow-md">Baca Dokumen</a>`;
+          if (kategori.toUpperCase().includes("PRESS") || kategori.toUpperCase().includes("BERITA")) {
+            aksiTombol = `<button onclick="bukaDetailBerita(${index})" class="block w-full md:w-auto text-center px-8 py-3 bg-[#8B0000] border border-[#8B0000] text-white hover:bg-[#600000] rounded-full font-bold transition-all duration-300 shadow-sm hover:shadow-md">Baca Berita</button>`;
+          }
+
           html += `
-        <div class="flex flex-col md:flex-row items-start md:items-center gap-6 p-6 md:p-8 hover:bg-red-50/30 transition-colors duration-300">
-            ${elemenFoto}
-            <div class="flex flex-col flex-grow">
-                <div class="mb-3">
-                    <span class="bg-red-50 text-[#8B0000] text-[11px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-widest">
-                        ${kategori}
-                    </span>
-                </div>
-                <h3 class="text-xl md:text-2xl font-black text-gray-900 mb-2 leading-tight">${judul}</h3>
-                <p class="text-sm text-gray-500 font-medium">Diperbarui : ${tanggal}</p>
+    <div class="flex flex-col md:flex-row items-start md:items-center gap-6 p-6 md:p-8 hover:bg-red-50/30 transition-colors duration-300">
+        ${elemenFoto}
+        <div class="flex flex-col flex-grow">
+            <div class="mb-3">
+                <span class="bg-red-50 text-[#8B0000] text-[11px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-widest">
+                    ${kategori}
+                </span>
             </div>
-            <div class="flex-shrink-0 mt-4 md:mt-0 w-full md:w-auto">
-                <a href="${link}" target="_blank" rel="noopener noreferrer" class="block w-full md:w-auto text-center px-8 py-3 bg-white border border-[#8B0000] text-[#8B0000] hover:bg-[#8B0000] hover:text-white rounded-full font-bold transition-all duration-300 shadow-sm hover:shadow-md">
-                    Baca Dokumen
-                </a>
-            </div>
+            <h3 class="text-xl md:text-2xl font-black text-gray-900 mb-2 leading-tight">${judul}</h3>
+            <p class="text-sm text-gray-500 font-medium">Diperbarui : ${tanggal}</p>
         </div>
-        `;
+        <div class="flex-shrink-0 mt-4 md:mt-0 w-full md:w-auto">
+            ${aksiTombol}
+        </div>
+    </div>
+    `;
         });
         wadah.innerHTML = html;
       }
 
-      function tampilkanBerita(dataMentah) {
+      function tampilkanBerita(dataYangSudahDiurutkan) {
         const wadah = document.getElementById("wadah-berita");
         if (!wadah) return;
 
-        if (!dataMentah || dataMentah.length === 0) {
+        if (!dataYangSudahDiurutkan || dataYangSudahDiurutkan.length === 0) {
           wadah.innerHTML = `<div class="col-span-full text-center py-8 text-gray-500">Belum ada berita terbaru.</div>`;
           return;
         }
 
-        const dataYangSudahDiurutkan = urutkanDataTerbaru(dataMentah);
+        // Khusus untuk di Beranda, kita saring HANYA yang berkategori Press Release/Berita
+        const khususBerita = dataYangSudahDiurutkan.filter(b =>
+          (b[0] || '').toUpperCase().includes("PRESS") || (b[0] || '').toUpperCase().includes("BERITA")
+        );
 
-        const beritaTerbaru = dataYangSudahDiurutkan.slice(0, 3);
+        const beritaTerbaru = khususBerita.slice(0, 3);
+
+        if (beritaTerbaru.length === 0) {
+          wadah.innerHTML = `<div class="col-span-full text-center py-8 text-gray-500">Belum ada rilis terbaru.</div>`;
+          return;
+        }
 
         let html = '';
         beritaTerbaru.forEach(baris => {
+          // Cari index aslinya di dataDokumenGlobal agar bisa dibuka dengan fungsi bukaDetailBerita
+          const originalIndex = dataDokumenGlobal.indexOf(baris);
+
           const kategori = baris[0] || 'Kategori';
           const judul = baris[1] || 'Tanpa Judul';
           const tanggal = baris[2] || '-';
-          const link = baris[3] || '#';
-          const fotoMentah = baris[4] || baris[5] || '';
+          const fotoMentah = baris[4] || ''; // Hanya baca dari Kolom E
 
           let fotoURL = fotoMentah;
           if (fotoMentah.includes("drive.google.com")) {
@@ -2385,24 +2459,125 @@
             `<img src="${fotoURL}" alt="${judul}" referrerpolicy="no-referrer" class="w-full h-44 object-cover rounded-xl transition-transform duration-500 group-hover:scale-105">` :
             `<div class="w-full h-44 bg-gray-100 flex items-center justify-center rounded-xl"><span class="text-gray-400 text-xs">Tidak ada foto</span></div>`;
 
+          // Ubah <a> tag menjadi <div onclick="...">
           html += `
-        <a href="${link}" target="_blank" rel="noopener noreferrer" class="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md hover:border-red-200 transition-all duration-300 flex flex-col h-full group">
-            <div class="mb-4 rounded-xl overflow-hidden bg-gray-50">
-                ${elemenFoto}
+    <div onclick="bukaDetailBerita(${originalIndex})" class="cursor-pointer bg-white p-4 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md hover:border-red-200 transition-all duration-300 flex flex-col h-full group">
+        <div class="mb-4 rounded-xl overflow-hidden bg-gray-50">
+            ${elemenFoto}
+        </div>
+        <div class="flex flex-col flex-grow px-2 pb-2">
+            <div class="mb-3">
+                <span class="bg-red-50 text-[#8B0000] text-[10px] font-bold px-2.5 py-1.5 rounded-md uppercase tracking-wider">
+                    ${kategori}
+                </span>
             </div>
-            <div class="flex flex-col flex-grow px-2 pb-2">
-                <div class="mb-3">
-                    <span class="bg-red-50 text-[#8B0000] text-[10px] font-bold px-2.5 py-1.5 rounded-md uppercase tracking-wider">
-                        ${kategori}
-                    </span>
-                </div>
-                <h3 class="text-sm md:text-base font-bold text-gray-900 mb-3 line-clamp-2 leading-snug group-hover:text-[#8B0000] transition-colors">${judul}</h3>
-                <p class="text-xs text-gray-400 mt-auto font-medium">${tanggal}</p>
-            </div>
-        </a>
-        `;
+            <h3 class="text-sm md:text-base font-bold text-gray-900 mb-3 line-clamp-2 leading-snug group-hover:text-[#8B0000] transition-colors">${judul}</h3>
+            <p class="text-xs text-gray-400 mt-auto font-medium">${tanggal}</p>
+        </div>
+    </div>
+    `;
         });
         wadah.innerHTML = html;
+      }
+
+      // Fungsi membuka mode baca khusus berita
+      function bukaDetailBerita(index) {
+        const baris = dataDokumenGlobal[index];
+        if (!baris) return;
+
+        const kategori = baris[0] || 'Kategori';
+        const judul = baris[1] || 'Tanpa Judul';
+        const tanggal = baris[2] || '-';
+        const konten = baris[5] || 'Teks press release belum ditambahkan di Excel...';
+        const penulis = baris[6] || 'Tim Redaksi';
+
+        let fotoMentah = baris[4] || '';
+        let fotoURL = 'https://via.placeholder.com/800x400?text=Gambar+Tidak+Tersedia';
+        if (fotoMentah.includes("drive.google.com")) {
+          let fileId = "";
+          if (fotoMentah.includes("/d/")) {
+            fileId = fotoMentah.split("/d/")[1].split("/")[0].split("?")[0];
+          } else if (fotoMentah.includes("id=")) {
+            fileId = fotoMentah.split("id=")[1].split("&")[0];
+          }
+          if (fileId) fotoURL = `https://lh3.googleusercontent.com/d/${fileId}`;
+        } else if (fotoMentah) {
+          fotoURL = fotoMentah;
+        }
+
+        document.getElementById('baca-penulis').innerText = penulis;
+        document.getElementById('baca-kategori').innerText = kategori;
+        document.getElementById('baca-tanggal').innerText = tanggal;
+        document.getElementById('baca-tanggal-penulis').innerText = tanggal;
+        document.getElementById('baca-judul').innerText = judul;
+        document.getElementById('baca-gambar').src = fotoURL;
+
+        let kontenHTML = konten.replace(/\n/g, '<br><br>');
+kontenHTML = kontenHTML.replace(/^(.*?)\s-\s/gm, '<strong>$1</strong> - ');
+        document.getElementById('baca-konten').innerHTML = kontenHTML;
+
+        // Sidebar Artikel Terkait
+        const sidebar = document.getElementById('sidebar-berita');
+        sidebar.innerHTML = '';
+
+        const artikelLain = dataDokumenGlobal.filter((item, i) => i !== index && (item[0] || '').toUpperCase().includes("PRESS")).slice(0, 3);
+
+        if (artikelLain.length === 0) {
+          sidebar.innerHTML = '<p class="text-sm text-white/70">Belum ada rilis terkait lainnya.</p>';
+        } else {
+          artikelLain.forEach(item => {
+            const originalIndex = dataDokumenGlobal.indexOf(item);
+            let thumb = item[4] || '';
+            if (thumb.includes("id=")) thumb = `https://lh3.googleusercontent.com/d/${thumb.split("id=")[1].split("&")[0]}`;
+            else if (thumb.includes("/d/")) thumb = `https://lh3.googleusercontent.com/d/${thumb.split("/d/")[1].split("/")[0].split("?")[0]}`;
+
+            sidebar.innerHTML += `
+          <div onclick="bukaDetailBerita(${originalIndex})" class="group cursor-pointer flex gap-4 items-center bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-colors">
+              <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-white/10">
+                  <img src="${thumb || fotoURL}" class="w-full h-full object-cover group-hover:scale-110 transition-transform">
+              </div>
+              <div>
+                  <span class="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded text-white mb-1 inline-block">${item[2]}</span>
+                  <h4 class="text-sm font-semibold text-white line-clamp-2 group-hover:text-red-200">${item[1]}</h4>
+              </div>
+          </div>
+          `;
+          });
+        }
+
+        // Pindah halaman ke detail-berita
+        if (typeof bukaHalaman === 'function') {
+          bukaHalaman('detail-berita');
+        } else {
+          console.error("Fungsi bukaHalaman tidak ditemukan.");
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function shareBerita(platform) {
+        const judul = document.getElementById('baca-judul').innerText;
+        const linkURL = window.location.href; // Mengambil URL halaman saat ini
+
+        if (platform === 'wa') {
+          const pesan = `Baca Press Release Parlemen Vaktavya:\n*${judul}*\n\n${linkURL}`;
+          window.open(`https://wa.me/?text=${encodeURIComponent(pesan)}`, '_blank');
+        }
+        else if (platform === 'fb') {
+          window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(linkURL)}`, '_blank');
+        }
+        else if (platform === 'twitter') {
+          const pesan = `Baca: ${judul}`;
+          window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(pesan)}&url=${encodeURIComponent(linkURL)}`, '_blank');
+        }
+        else if (platform === 'copy') {
+          // Fitur menyalin link ke clipboard otomatis
+          navigator.clipboard.writeText(linkURL).then(() => {
+            alert("Tautan berhasil disalin ke clipboard!");
+          }).catch(err => {
+            console.error("Gagal menyalin link: ", err);
+          });
+        }
       }
 
       window.addEventListener("DOMContentLoaded", function () {
@@ -2411,7 +2586,6 @@
         }
         muatDokumen();
       });
-
       function tutupModal() {
         document.getElementById("suksesModal").classList.add("hidden");
       }
