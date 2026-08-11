@@ -151,9 +151,18 @@
 
 </head>
 
-</head>
-
 <body class="bg-gray-50 text-gray-900 font-sans overflow-x-hidden">
+
+<div id="skrin-loading-global" class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center hidden">
+  <img src="https://drive.google.com/thumbnail?id=1xpvGwKgsOgLzdWHGxkQ_lMT4IWUUPdVD&sz=w500" alt="Logo Parlemen Vaktavya" class="h-24 mb-8 animate-pulse">
+  <div class="flex items-center gap-3 text-gray-500">
+    <svg class="animate-spin h-5 w-5 text-[#8B0000]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    <span class="text-sm font-medium tracking-wide">Memuat Berita...</span>
+  </div>
+</div>
 
   <div id="intro-animasi"
     class="fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-700">
@@ -2309,33 +2318,72 @@
 
       let dataDokumenGlobal = [];
 
-      function muatDokumen() {
+      // =========================================================================
+// 1. FUNGSI MUAT DATA & LOGIKA LOADING SCREEN (VERSI FINAL TERBAIK)
+// =========================================================================
+function muatDokumen() {
+  // --- KUNCI UX INSTAN: Cek URL di AWAL ---
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramBerita = urlParams.get('berita');
+  const skrinLoading = document.getElementById('skrin-loading-global');
+
+  if (paramBerita && skrinLoading) {
+    // --- JIKA BUKA LINK BERITA: MUNCULKAN LOADING SCREEN SEGERA ---
+    skrinLoading.classList.remove('hidden'); // Tampilkan loading screen putih penuh
+    
+    // Siapkan halaman Detail Berita di latar belakang
+    if (typeof bukaHalaman === 'function') bukaHalaman('detail-berita');
+    
+    // Jangan lupa scroll ke atas
+    window.scrollTo({ top: 0 });
+  }
+
   const waktuSekarang = new Date().getTime();
   fetch(SCRIPT_URL_API + "?action=dokumen&t=" + waktuSekarang)
     .then(res => res.json())
     .then(dataMentah => {
       try {
         dataDokumenGlobal = urutkanDataTerbaru(dataMentah);
+        
+        // Render data ke dokumen & beranda (di latar belakang)
         if (typeof tampilkanDokumen === 'function') tampilkanDokumen(dataDokumenGlobal);
         if (typeof tampilkanBerita === 'function') tampilkanBerita(dataDokumenGlobal);
-        const urlParams = new URLSearchParams(window.location.search);
-        const paramBerita = urlParams.get('berita');
-        
+
+        // --- DATA SUDAH SAMPAI: PROSES BUKA BERITA ---
         if (paramBerita) {
           const indexDicari = dataDokumenGlobal.findIndex(baris => baris[1] === paramBerita);
           if (indexDicari !== -1) {
+            // Isi konten Detail Berita (Skrin loading masih menutupi)
             bukaDetailBerita(indexDicari);
+          } else {
+             // Jika berita tidak ditemukan, pergi ke halaman dokumen
+             if (typeof bukaHalaman === 'function') bukaHalaman('dokumen');
           }
         }
+
       } catch (e) {
         console.error("Error memproses data:", e);
+      } finally {
+         // --- APAPUN HASILNYA (Sukses/Error), SEMBUNYIKAN LOADING SCREEN ---
+         // Halaman berita sudah terisi, barulah kita buka tirai loading-nya
+         if (skrinLoading) {
+             // Beri sedikit delay halus (300ms) agar transisi tidak terlalu kaget
+             setTimeout(() => {
+                 skrinLoading.classList.add('hidden');
+             }, 300);
+         }
       }
     })
     .catch(err => {
       console.error("Gagal koneksi ke server:", err);
-      const wadah = document.getElementById("wadah-dokumen");
-      if (wadah) wadah.innerHTML =
-        `<div class="text-center text-red-500 py-8">Gagal memuat data dari server. Mohon periksa koneksi internet Anda.</div>`;
+      
+      // Sembunyikan loading jika error
+      if (skrinLoading) skrinLoading.classList.add('hidden');
+
+      const wadahKonten = document.getElementById('baca-konten');
+      if (paramBerita && wadahKonten) {
+          wadahKonten.innerHTML = '<div class="text-center py-20 text-red-500 font-bold">Gagal memuat konten berita. <br> Mohon periksa koneksi internet Anda.</div>';
+      }
     });
 }
 
