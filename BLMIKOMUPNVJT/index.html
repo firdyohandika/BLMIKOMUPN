@@ -1979,8 +1979,12 @@
             </div>
           </div>
 
-          <div class="w-full h-[250px] md:h-[400px] rounded-2xl overflow-hidden mb-8 bg-gray-100">
-            <img id="baca-gambar" src="" alt="Thumbnail Berita" class="w-full h-full object-cover">
+          <div class="w-full mb-8 relative">
+            <div class="h-[250px] md:h-[400px] rounded-2xl overflow-hidden bg-gray-100">
+              <img id="baca-gambar" src="" alt="Thumbnail Berita" class="w-full h-full object-cover">
+            </div>
+            <p id="sumber-foto" class="text-center mt-2 hidden italic text-sm text-gray-700">
+            </p>
           </div>
 
           <div id="baca-konten" class="text-gray-700 leading-relaxed space-y-4 text-justify">
@@ -2322,16 +2326,6 @@
       let dataDokumenGlobal = [];
 
       function muatDokumen() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const paramBerita = urlParams.get('berita');
-        const skrinLoading = document.getElementById('skrin-loading-global');
-
-        if (paramBerita && skrinLoading) {
-          skrinLoading.classList.remove('hidden');
-          if (typeof bukaHalaman === 'function') bukaHalaman('detail-berita');
-          window.scrollTo({ top: 0 });
-        }
-
         const waktuSekarang = new Date().getTime();
         fetch(SCRIPT_URL_API + "?action=dokumen&t=" + waktuSekarang)
           .then(res => res.json())
@@ -2340,32 +2334,23 @@
               dataDokumenGlobal = urutkanDataTerbaru(dataMentah);
               if (typeof tampilkanDokumen === 'function') tampilkanDokumen(dataDokumenGlobal);
               if (typeof tampilkanBerita === 'function') tampilkanBerita(dataDokumenGlobal);
+              const urlParams = new URLSearchParams(window.location.search);
+              const paramBerita = urlParams.get('berita');
               if (paramBerita) {
                 const indexDicari = dataDokumenGlobal.findIndex(baris => baris[1] === paramBerita);
                 if (indexDicari !== -1) {
                   bukaDetailBerita(indexDicari);
-                } else {
-                  if (typeof bukaHalaman === 'function') bukaHalaman('dokumen');
                 }
               }
-
             } catch (e) {
               console.error("Error memproses data:", e);
-            } finally {
-              if (skrinLoading) {
-                setTimeout(() => {
-                  skrinLoading.classList.add('hidden');
-                }, 300);
-              }
             }
           })
           .catch(err => {
             console.error("Gagal koneksi ke server:", err);
-            if (skrinLoading) skrinLoading.classList.add('hidden');
-            const wadahKonten = document.getElementById('baca-konten');
-            if (paramBerita && wadahKonten) {
-              wadahKonten.innerHTML = '<div class="text-center py-20 text-red-500 font-bold">Gagal memuat konten berita. <br> Mohon periksa koneksi internet Anda.</div>';
-            }
+            const wadah = document.getElementById("wadah-dokumen");
+            if (wadah) wadah.innerHTML =
+              `<div class="text-center text-red-500 py-8">Gagal memuat data dari server. Mohon periksa koneksi internet Anda.</div>`;
           });
       }
 
@@ -2523,11 +2508,14 @@
       function bukaDetailBerita(index) {
         const baris = dataDokumenGlobal[index];
         if (!baris) return;
+
         const kategori = baris[0] || 'Kategori';
         const judul = baris[1] || 'Tanpa Judul';
         const tanggal = baris[2] || '-';
         const konten = baris[5] || 'Teks press release belum ditambahkan di Excel...';
         const penulis = baris[6] || 'Tim Redaksi';
+        const sumberFoto = baris[7] || '';
+
         let fotoMentah = baris[4] || '';
         let fotoURL = 'https://via.placeholder.com/800x400?text=Gambar+Tidak+Tersedia';
         if (fotoMentah.includes("drive.google.com")) {
@@ -2548,15 +2536,26 @@
         if (document.getElementById('baca-tanggal-penulis')) document.getElementById('baca-tanggal-penulis').innerText = tanggal;
         if (document.getElementById('baca-judul')) document.getElementById('baca-judul').innerText = judul;
         if (document.getElementById('baca-gambar')) document.getElementById('baca-gambar').src = fotoURL;
-
+        
         let kontenHTML = konten.replace(/\n/g, '<br><br>');
         kontenHTML = kontenHTML.replace(/^(.*?)\s-\s/gm, '<strong>$1</strong> - ');
         if (document.getElementById('baca-konten')) document.getElementById('baca-konten').innerHTML = kontenHTML;
 
+        const elemenSumber = document.getElementById('sumber-foto');
+        if (elemenSumber) {
+          if (sumberFoto) {
+            elemenSumber.innerText = "Sumber: " + sumberFoto;
+            elemenSumber.classList.remove('hidden');
+          } else {
+            elemenSumber.innerText = '';
+            elemenSumber.classList.add('hidden');
+          }
+        }
+
         const sidebar = document.getElementById('sidebar-berita');
         if (sidebar) {
           sidebar.innerHTML = '';
-          const artikelLain = dataDokumenGlobal.filter((item, i) => i !== index && (item[0] || '').toUpperCase().includes("PRESS")).slice(0, 3);
+          const artikelLain = dataDokumenGlobal.filter((item, i) => i !== index).slice(0, 3);
 
           if (artikelLain.length === 0) {
             sidebar.innerHTML = '<p class="text-sm text-white/70">Belum ada rilis terkait lainnya.</p>';
@@ -2573,7 +2572,7 @@
                       <img src="${thumb || fotoURL}" class="w-full h-full object-cover group-hover:scale-110 transition-transform">
                   </div>
                   <div>
-                      <span class="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded text-white mb-1 inline-block">${item[2]}</span>
+                      <span class="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded text-white mb-1 inline-block">${item[0]}</span>
                       <h4 class="text-sm font-semibold text-white line-clamp-2 group-hover:text-red-200">${item[1]}</h4>
                   </div>
               </div>
@@ -2581,23 +2580,17 @@
             });
           }
         }
-
         try {
           const paramJudul = encodeURIComponent(judul);
-          // Kita paksa ambil origin dan pathname saja, buang semua hash (#)
-          const base_url = window.location.origin + window.location.pathname;
-          const urlBaru = base_url + "?berita=" + paramJudul;
+          const basePath = window.location.href.split('?')[0].split('#')[0];
+          const urlBaru = basePath + "?berita=" + paramJudul;
           window.history.pushState({ path: urlBaru }, '', urlBaru);
         } catch (e) {
           console.error("Gagal mengubah URL:", e);
         }
-
         if (typeof bukaHalaman === 'function') {
           bukaHalaman('detail-berita');
-        } else {
-          console.error("Fungsi bukaHalaman tidak ditemukan.");
         }
-
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
